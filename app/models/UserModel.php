@@ -75,7 +75,7 @@
 			 * send auth to email*/
 			$body = <<<EOF
 				<div>
-					Hi {$user->first_name} , Your Credentials
+					Hi {$user->firstname} , Your Credentials
 					for the {$app_name} Portal <br/>
 					<strong>username/email : {$user->email}  </strong> <br/>
 					<strong>password : {$user->password}  </strong>
@@ -141,7 +141,7 @@
 			if(!empty($profile) )
 				$this->uploadProfile($profile , $res);
 
-			$this->addMessage("User {$user_data['first_name']} Created");
+			$this->addMessage("User {$user_data['firstname']} Created");
 			return $res;
 		}
 
@@ -183,7 +183,7 @@
 				$this->addError("Unable to update user");
 				return false;
 			}
-			$this->addMessage("User {$user_data['first_name']} has been updated!");
+			$this->addMessage("User {$user_data['firstname']} has been updated!");
 
 			return true;
 		}
