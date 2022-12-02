@@ -192,7 +192,7 @@
 				'type' => 'password',
 				'name' => 'password',
 				'class' => 'form-control',
-				'required' => '',
+				'required' => true,
 				'options' => [
 					'label' => 'Password',
 				],
