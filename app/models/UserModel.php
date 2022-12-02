@@ -44,8 +44,10 @@
 				//change password also
 				if(empty($fillable_datas['password']))
 					unset($fillable_datas['password']);
+						
 				$res = parent::update($fillable_datas , $id);
-				if( isset($user_data['profile']) ){
+
+				if (!upload_empty('profile')) {
 					$this->uploadProfile('profile' , $id);
 				}
 				$user_id = $id;
