@@ -1,5 +1,5 @@
 <h4>Feeds</h4>
-<h5><?php echo wLinkDefault('#', 'Create Feed')?></h5>
+<?php echo wLinkDefault(_route('classroom:show', $id, ['page' => 'feed_create']), 'Create Feed')?>
 
 <div id="feed" style="display: none">
     <?php grab('tmp/inc/form_feed',[
@@ -11,12 +11,13 @@
 
 <?php if($feeds) :?>
     <?php foreach($feeds as $key => $row) :?>
-        <div class="card" style="border: 1px solid #000;">
-            <div class="card-header">
-                <div class="card-title"><?php echo $row->title?></div>
-            </div>
+        <div class="card">
             <div class="card-body">
+                <div class="card-title">
+                    <a href="<?php echo _route('classroom:show', $id, ['page' => 'feed_show', 'feedId' => $row->id])?>"><?php echo $row->title?></a>
+                </div>
                 <?php echo $row->content?>
+                <hr>
                 <div>#<?php echo $row->tags?></div>
             </div>
         </div>

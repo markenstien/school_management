@@ -2,6 +2,7 @@
     <div class="card">
         <div class="card-header">
             <h4 class="card-title">Create Classroom</h4>
+            <?php echo wLinkDefault(_route('classroom:index'), 'Classrooms');?>
         </div>
 
         <div class="card-body">

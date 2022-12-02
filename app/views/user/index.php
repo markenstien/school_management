@@ -13,6 +13,7 @@
 				<table class="table table-bordered dataTable">
 					<thead>
 						<th>Name</th>
+						<th>Student Number</th>
 						<th>Gender</th>
 						<th>Phone Number</th>
 						<th>Type</th>
@@ -23,6 +24,7 @@
 						<?php foreach( $users as $row) :?>
 							<tr>
 								<td><?php echo $row->lastname . ' , ' .$row->firstname?></td>
+								<td><?php echo $row->user_identification?></td>
 								<td><?php echo $row->gender ?></td>
 								<td><?php echo $row->phone ?></td>
 								<td><?php echo $row->user_type ?></td>

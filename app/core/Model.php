@@ -62,9 +62,14 @@
 
 		public function delete($id)
 		{
+			if(is_array($id)) {
+				$id = $this->conditionConvert($id);
+			} else {
+				$id = " id = '{$id}'";
+			}
 			$data = [
 				$this->table,
-				"id = '{$id}'"
+				$id
 			];
 
 			return $this->dbHelper->delete(...$data);

@@ -10,10 +10,40 @@
             'theme'
         ];
 
+
+        public function delete($id) {
+            $classroom = $this->get($id);
+
+            if (!$classroom) {
+                $this->addError("Classroom does not exists.");
+                return false;
+            }
+
+            $classStudentModel = model('ClassStudentModel');
+            $taskModel = model('TaskModel');
+
+            //delete all items 
+
+            //tasks
+            //students
+
+            $isStudentModel = $classStudentModel->deleteFromClass($id);
+            $isTaskmodel = $taskModel->deleteFromClass($id);
+            parent::delete($id);
+            
+            if($isStudentModel && $isTaskmodel) {
+                $this->addMessage("CLASS {$classroom->class_name} Has been deleted! :: Class Reference : {$classroom->reference_code}");
+                return true;
+            } else {
+                $this->addError("Unable to delete class");
+                return false;
+            }
+        }
         public function createOrUpdate($classData, $id = null) {
             $_fillables = parent::getFillablesOnly($classData);
             if (is_null($id)) {
                 $_fillables['reference_code'] = referenceSeries(parent::lastId(), 5, 'SY'.date('Y').'-');
+                $_fillables['join_code'] = $this->createJoinCode();
                 //create
                 $retVal = parent::store($_fillables);
             } else {
@@ -21,6 +51,22 @@
             }
 
             return $retVal;
+        }
+
+        public function createJoinCode() {
+            $joinCode = null;
+
+            while(is_null($joinCode)) {
+                $joinCode = strtoupper(get_token_random_char(6));
+                $isExist = parent::single([
+                    'join_code' => $joinCode
+                ]);
+                if($isExist) {
+                    $joinCode = null;
+                }
+            }
+
+            return $joinCode;
         }
 
         public function getAll($params = []) {
@@ -71,12 +117,20 @@
                 return false;
             }
 
+            $addStudent = $this->addStudent($studentId, $classroom->id);
+            $this->retVal['classroom'] = $classroom;
+
+            return $addStudent;
+        }
+
+        public function addStudent($studentId, $classroomId) {
             //load student join
             $classStudentModel = model('ClassStudentModel');
             
+            //check if student already exists
             $isOk = $classStudentModel->join([
                 'student_id' => $studentId,
-                'class_id' => $classroom->id,
+                'class_id' => $classroomId,
                 'joined_by' => 'CODE'
             ]);
 
@@ -86,15 +140,16 @@
             }
 
             $this->retVal['classroom_id'] = $classroom->id; 
-            $this->addMessage("Successfully joined classroom : {$classroom->class_name}");
-            return $classroom;
+            $this->addMessage("Student Successfully joined the classroom");
+
+            return $isOk;
         }
 
         public function getStudents($id) {
             $this->db->query(
-                "SELECT user.* 
+                "SELECT user.*, cs.id as class_student_id
                     FROM class_students as cs 
-                    LEFT JOIN users as user
+                    JOIN users as user
                     ON user.id = cs.student_id
                 WHERE class_id = {$id}"
             );
@@ -112,6 +167,12 @@
             return parent::update([
                 'teacher_id' => $teacherId
             ], $classroomId);
+        }
+
+        public function resetJoinCode($id) {
+            return parent::update([
+                'join_code' => $this->createJoinCode()
+            ], $id);
         }
     }
 ?>

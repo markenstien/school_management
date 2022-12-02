@@ -6,6 +6,7 @@
         {
             parent::__construct();
             $this->model = model('TaskSubmissionModel');
+            $this->task = model('TaskModel');
         }
 
         public function create() {
@@ -31,7 +32,40 @@
 
         public function show($id) {
             $taskSubmit = $this->model->get($id);
+            $task = $this->task->get($taskSubmit->task_id);
+
+            if (isSubmitted()) {
+                $post = request()->posts();
+
+                if (!empty($post['btn_approve'])) {
+
+                    if (!empty($post['passing_score'])) {
+                        if($post['passing_score'] < $post['user_score']) {
+                            Flash::set("Invalid Score", 'danger');
+                            return request()->return();
+                        }
+                    }
+                    Flash::set("Task Submission Approved");
+                    $this->model->approve($id);
+                    $this->model->update([
+                        'user_score' => $post['user_score']
+                    ], $id);
+                }
+
+                if (!empty($post['btn_decline'])) {
+                    Flash::set("Task Submission Declined", 'danger');
+                    $this->model->decline($id);
+                }
+
+                return redirect(_route('classroom:show', $task->parent_id, [
+                    'page' => 'task_show',
+                    'taskId' => $task->id
+                ]));
+            }
+            
+
             $this->data['taskSub'] = $taskSubmit;
+            $this->data['task'] = $task;
 
             return $this->view('task_submission/show', $this->data);
         }

@@ -27,4 +27,10 @@
                 return $joinId;
             }
         }
+
+        public function deleteFromClass($classroom_id) {
+            return parent::delete([
+                'class_id' => $classroom_id
+            ]);
+        }
     }

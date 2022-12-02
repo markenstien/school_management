@@ -2,11 +2,17 @@
     <div class="card">
         <div class="card-header">
             <h4 class="card-title">Classrooms</h4> 
-            <?php echo wLinkDefault(_route('classroom:create'), 'Create')?>
-            <?php echo wLinkDefault(_route('classroom:join'), 'Join')?>
+            <?php
+                if(isAdmin())
+                    echo wLinkDefault(_route('classroom:create'), 'Create');
+
+                if(isStudent())
+                    echo wLinkDefault(_route('classroom:join'), 'Join');
+            ?>
         </div>
 
         <div class="card-body">
+            <?php Flash::show()?>
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>

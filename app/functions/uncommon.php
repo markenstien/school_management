@@ -58,6 +58,23 @@
         return Session::get('auth');
     }
 
+
+    function isStudent() {
+        return isEqual(whoIs('user_type'), 'student');
+    }
+
+    function isAdmin() {
+        return isEqual(whoIs('user_type'), 'admin');
+    }
+
+    function isTeacher() {
+        return isEqual(whoIs('user_type'), 'teacher');
+    }
+
+    function isParent() {
+        return isEqual(whoIs('user_type'), 'parent');
+    }
+
     function whoIs($prop = null)
 	{
         $user = Session::get('auth');

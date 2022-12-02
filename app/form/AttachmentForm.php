@@ -28,6 +28,7 @@
 			$this->addGlobalId();
 			$this->addGlobalKey();
 			$this->addFileUpload();
+			$this->addMultipleFileUpload();
 			
 			$this->addSubmit();
 		}
@@ -125,6 +126,16 @@
 
 		public function addMultipleFileUpload()
 		{
-
+			$this->add([
+				'type' => 'file',
+				'name' => 'file_array[]',
+				'options' => [
+					'label' => 'Select Multiple Files'
+				],
+				'class' => 'form-control',
+				'attributes' => [
+					'multiple' => true
+				]
+			]);
 		}
 	}

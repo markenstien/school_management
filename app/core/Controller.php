@@ -154,7 +154,7 @@
 
 		public function destroy($id)
 		{
-			$route = $_GET['route'] ?? null;
+			$returnTo = $_GET['returnTo'] ?? null;
 
 			if( isset( $this->model ))
 			{
@@ -168,8 +168,8 @@
 				}
 
 				Flash::set( "Deleted succesfully ");
-				if( !is_null($route) )
-					return redirect( unseal($route) ); 
+				if( !is_null($returnTo) )
+					return redirect( unseal($returnTo) ); 
 				return request()->return();
 			}else
 			{

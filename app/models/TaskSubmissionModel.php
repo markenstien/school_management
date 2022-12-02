@@ -71,4 +71,18 @@
             
             return $submission;
         }
+
+        public function approve($id) {
+            return parent::update([
+                'status' => 'approved'
+            ], $id);
+        }
+
+        public function decline($id) {
+            return parent::update([
+                'status' => 'denied'
+            ], $id);
+        }
     }
+
+

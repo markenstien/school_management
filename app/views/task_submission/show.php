@@ -6,6 +6,9 @@
 
 
         <div class="card-body">
+            <?php Flash::show()?>
+            <?php Form::open(['method' => 'post'])?>
+            <?php Form::hidden('passing_score', $task->passing_score)?>
             <div class="row">
                 <div class="col-md-5">
                     <div class="table-responsive">
@@ -19,8 +22,16 @@
                                 <td><?php echo $taskSub->firstname . ' ' .$taskSub->lastname?></td>
                             </tr>
                             <tr>
+                                <td>Passing Score</td>
+                                <td>
+                                    <?php echo $task->passing_score; ?>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>User Score</td>
-                                <td><?php echo $taskSub->user_score?></td>
+                                <td>
+                                    <?php Form::text('user_score', $taskSub->user_score); ?>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Task</td>
@@ -34,8 +45,19 @@
                             <tr>
                                 <td>Action</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-primary">APPROVE</a>
-                                    <a href="#" class="btn btn-sm btn-danger">DECLINE</a>
+                                    <?php
+                                        Form::submit('btn_approve', 'APPROVE', ['class' => 'btn btn-primary btn-sm']);
+                                        Form::submit('btn_decline', 'DECLINE', ['class' => 'btn btn-danger btn-sm']);
+                                    ?>
+                                    <?php echo wDivider()?>
+
+                                    <a href="<?php echo _route('task-sub:delete', $taskSub->id, [
+                                        'returnTo' => seal(_route('classroom:show', $task->parent_id, [
+                                            'page' => 'task_show',
+                                            'taskId' => $task->id
+                                        ]))
+                                        ])?>" 
+                                        class="btn btn-danger btn-sm form-verify">Delete</a>
                                 </td>
                             </tr>
                         </table>
@@ -46,12 +68,12 @@
                     <?php if($taskSub->attachments) :?>
                         <?php foreach($taskSub->attachments as $key => $row) :?>
                             <img src="<?php echo $row->full_url?>" alt=""
-                                style="width: 250px;">
+                                style="width: 400px;">
                         <?php endforeach?>
                     <?php endif?>
                 </div>
             </div>
-            
+            <?php Form::close()?>
         </div>
     </div> 
 <?php endbuild()?>

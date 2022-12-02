@@ -18,19 +18,21 @@
 
 			$this->initCreate();
 			$this->addUserIdentification();
+			$this->addUserType();
+
 			/*personal details*/
 			$this->addFirstName();
 			$this->addLastName();
 			$this->addGender();
+
+			$this->addUsername();
+			$this->addPassword();
+			$this->addProfile();
 			/*end*/
 			$this->addPhoneNumber();
 			$this->addEmail();
 			$this->addAddress();
 
-			$this->addUsername();
-			$this->addPassword();
-			$this->addUserType();
-			$this->addProfile();
 			
 			$this->addSubmit('');
 		}
@@ -51,12 +53,12 @@
 				'class' => 'form-control',
 				'required' => true,
 				'options' => [
-					'label' => 'Student Id'
+					'label' => 'User ID'
 				],
 
 				'attributes' => [
 					'id' => 'student_id',
-					'placeholder' => 'Enter Student Id'
+					'placeholder' => 'User ID'
 				]
 			]);
 		}
@@ -113,7 +115,8 @@
 
 				'attributes' => [
 					'id' => 'gender',
-				]
+				],
+				'required' => true
 			]);
 		}
 
@@ -174,7 +177,7 @@
 				'type' => 'text',
 				'name' => 'username',
 				'class' => 'form-control',
-				'required' => '',
+				'required' => true,
 				'options' => [
 					'label' => 'Username',
 				],
@@ -209,13 +212,14 @@
 				'type' => 'select',
 				'name' => 'user_type',
 				'class' => 'form-control',
-				'required' => '',
+				'required' => true,
 				'options' => [
 					'label' => 'User Type',
 					'option_values' => [
 						UserService::STUDENT,
 						UserService::TEACHER,
 						UserService::PARENT,
+						UserService::ADMIN,
 					]
 				],
 				'attributes' => [

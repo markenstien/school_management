@@ -30,6 +30,36 @@
 			$this->uploader_helper = new UploaderHelper();
 		}
 
+		public function upload_multiple($file_data = [] , $file_name = '') {
+
+			$uploadResponse = upload_multiple($file_name, $this->path);
+
+			if (!empty($uploadResponse['result']['arrNames'])) {
+				$uploadedItems = $uploadResponse['result']['arrNames'];
+				$oldNames = $uploadResponse['result']['arrNamesOld'];
+
+				foreach($uploadedItems as $key => $row) {
+
+					$fileExt = explode('.', $row);
+					$fileExt = end($fileExt);
+
+					$file_data['file_type'] = $fileExt;
+					$file_data['path']      = $this->path;
+					$file_data['full_path'] = $this->path.DS.$row;
+					$file_data['url']       = $this->url;
+					$file_data['full_url']  = $this->url.DS.$row;
+					$file_data['filename']  = $row;
+					$file_data['display_name'] = $oldNames[$key];
+
+					//clean
+					$fillable_datas = $this->getFillablesOnly($file_data);
+					//upload
+					$upload_ok = parent::store($fillable_datas);
+				}
+			}
+
+			return true;
+		}
 		/*
 		*label , display_name , search_key,
 		*description , global_key , global_id

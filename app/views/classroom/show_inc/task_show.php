@@ -1,8 +1,12 @@
 <div>
     <h4>Task Preview #<?php echo $task->task_reference?></h4>
-    <?php echo wLinkDefault(_route('task:edit', $task->id, [
-        'returnTo' => seal(_route('classroom:show', $task->parent_id, ['page' => 'tasks']))
-    ]));?>
+    <?php
+    if(isTeacher() || isAdmin()) 
+        echo wLinkDefault(_route('task:edit', $task->id, [
+            'returnTo' => seal(_route('classroom:show', $task->parent_id, ['page' => 'tasks']))
+        ]));
+    ?>
+    <?php ?>
     <div class="row">
         <div class="col-md-6">
             <div class="table-responsive">
@@ -78,7 +82,7 @@
                         <td><?php echo $row->user_identification?></td>
                         <td><?php echo $row->created_at?></td>
                         <td><?php echo $row->user_score?></td>
-                        <td>#</td>
+                        <td><?php echo $row->status?></td>
                         <td>
                             <?php echo wLinkDefault(_route('task-sub:show', $row->id), 'Show')?>
                         </td>

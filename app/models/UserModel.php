@@ -27,10 +27,17 @@
 
 		public function get($id)
 		{
-			$user = parent::get($id);
-			if(!$user)
-				return false;
-			return $user;
+			if (is_array($id)) {
+				return $this->getAll([
+					'where' => $id
+				])[0] ?? false;
+			} else {
+				return $this->getAll([
+					'where' => [
+						'id' => $id
+					]
+				])[0] ?? false;
+			}
 		}
 
 		public function save($user_data , $id = null)
@@ -44,12 +51,12 @@
 				//change password also
 				if(empty($fillable_datas['password']))
 					unset($fillable_datas['password']);
-						
-				$res = parent::update($fillable_datas , $id);
 
-				if (!upload_empty('profile')) {
-					$this->uploadProfile('profile' , $id);
+				$this->uploadProfile('profile' , $id);
+				if(!empty($fillable_datas['profile'])){
+					unset($fillable_datas['profile']);
 				}
+				$res = parent::update($fillable_datas , $id);
 				$user_id = $id;
 			}else
 			{

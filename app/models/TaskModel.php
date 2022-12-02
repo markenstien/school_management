@@ -29,4 +29,35 @@ use function PHPSTORM_META\map;
                 return parent::update($_fillables, $id);
             }
         }
+
+        public function deleteFromClass($classroomId) {
+            $tasks = parent::all([
+                'parent_id' => $classroomId
+            ]);
+
+            $taskIds = [];
+            foreach($tasks as $key => $row) {
+                $tasksIds [] = $row->id;
+            }
+
+            if(!isset($this->taskSubmissionModel)) {
+                $this->taskSubmissionModel = model('TaskSubmissionModel');
+            }
+
+            if($taskIds) {
+                $this->taskSubmissionModel->delete([
+                    'global_key' => 'TASK_SUBMISSION_IMAGE',
+                    'global_id'  => [
+                        'condition' => 'in',
+                        'value' => $taskIds
+                    ]
+                ]);
+
+                parent::delete([
+                    'parent_id' => $classroomId
+                ]);
+            }
+            
+            return true;
+        }
     }

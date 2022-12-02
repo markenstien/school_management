@@ -42,6 +42,18 @@ use Services\UserService;
             ]);
         }
 
+        public function addJoinCode() {
+            $this->add([
+                'name' => 'join_code',
+                'type' => 'text',
+                'class' => 'form-control',
+                'options' => [
+                    'label' => 'Class Code'
+                ],
+                'required' => true
+            ]);
+        }
+
         public function addDescription() {
             $this->add([
                 'name' => 'description',

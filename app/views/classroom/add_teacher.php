@@ -4,8 +4,8 @@
         <div class="card-header">
             <h4 class="card-title">Add teacher to : <?php echo $classroom->class_name?></h4>
         </div>
-
         <div class="card-body">
+            <?php Flash::show()?>
             <?php
                 Form::open([
                     'method' => 'post'

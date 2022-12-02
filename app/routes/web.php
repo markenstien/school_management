@@ -99,7 +99,18 @@
 		'download' => $controller.'/download',
 		'show'   => $controller.'/show',
 		'join'   => $controller.'/join',
-		'addTeacher' => $controller. '/addTeacher'
+		'addTeacher' => $controller. '/addTeacher',
+		'addStudent' => $controller. '/addStudent',
+		'resetJoinCode' => $controller .'/resetJoinCode'
+	];
+
+	$controller = '/ClassStudentController';
+	$routes['class-student'] = [
+		'index' => $controller.'/index',
+		'edit' => $controller.'/edit',
+		'create' => $controller.'/create',
+		'delete' => $controller.'/destroy',
+		'download' => $controller.'/download'
 	];
 
 	$controller = '/TaskController';

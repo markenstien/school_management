@@ -11,10 +11,15 @@
         public function __construct()
         {
             parent::__construct('feed-form');
+
+            $this->addParentKey();
+            $this->addParentId();
             $this->addTitle();
             $this->addContent();
             $this->addTags();
             $this->addType();
+            $this->addCategory();
+            $this->addOwnerId();
         }
 
         public function addTitle() {
@@ -24,7 +29,8 @@
                 'class' => 'form-control',
                 'options' => [
                     'label' => 'Title'
-                ]
+                ],
+                'required' => true
             ]);
         }
 
@@ -38,12 +44,17 @@
                 ],
                 'attributes' => [
                     'rows' => 5
-                ]
+                ],
+                'require' => true
             ]);
         }
 
         public function addOwnerId() {
-
+            $this->add([
+                'name' => 'owner_id',
+                'type' => 'hidden',
+                'value' => whoIs('id')
+            ]);
         }
 
         public function addTags() {
@@ -59,7 +70,7 @@
 
         public function addCategory() {
             $this->add([
-                'name' => 'Tags',
+                'name' => 'category',
                 'type' => 'select',
                 'class' => 'form-control',
                 'options' => [
@@ -75,16 +86,31 @@
 
         public function addType() {
             $this->add([
-                'name' => 'category',
+                'name' => 'type',
                 'type' => 'select',
                 'class' => 'form-control',
                 'options' => [
-                    'label' => 'Category',
+                    'label' => 'Type',
                     'option_values' => [
                         'announcements',
                         'feed'
                     ]
-                ]
+                ],
+                'required' => true
+            ]);
+        }
+
+        public function addParentKey() {
+            $this->add([
+                'name' => 'parent_key',
+                'type' => 'hidden',
+            ]);
+        }
+
+        public function addParentId() {
+            $this->add([
+                'name' => 'parent_id',
+                'type' => 'hidden',
             ]);
         }
     }

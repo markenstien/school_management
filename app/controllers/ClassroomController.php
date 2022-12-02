@@ -2,10 +2,12 @@
 
     use Form\ClassForm;
     use Form\TaskForm;
-use Services\UserService;
+    use Form\FeedForm;
+    use Services\UserService;   
+    use Services\CommonService;
 
-    load(['ClassForm', 'TaskForm'], FORMS);
-    load(['UserService'], SERVICES);
+    load(['ClassForm', 'TaskForm', 'FeedForm'], FORMS);
+    load(['UserService', 'CommonService'], SERVICES);
     
 
     class ClassroomController extends Controller {
@@ -16,12 +18,13 @@ use Services\UserService;
             $this->model = model('ClassroomModel');
             $this->taskModel = model('TaskModel');    
             $this->userModel = model('UserModel');
+            $this->feedModel = model('FeedModel');
             $this->data['_attachmentForm'] = $this->_attachmentForm;
             $this->data['form'] = new ClassForm();
         }
 
         public function index() {
-            $this->data['classrooms'] = $this->model->all();
+            $this->data['classrooms'] = $this->model->all(null, 'id desc');
             return $this->view('classroom/index', $this->data);
         }
 
@@ -33,10 +36,10 @@ use Services\UserService;
                 $classroomId = $this->model->createOrUpdate($req);
                 if($classroomId) {
                     Flash::set($this->model->getMessageString());
-                    return request()->return();
+                    return redirect(_route('classroom:show', $classroomId));
                 } else {
                     Flash::set($this->model->getErrorString(), 'danger');
-                    return redirect(_route('classroom:show', $classroomId));
+                    return request()->return();
                 }
             }            
             return $this->view('classroom/create', $this->data);
@@ -50,21 +53,62 @@ use Services\UserService;
 
             $this->data['id'] = $id;
             $this->data['classroom'] = $classroom;
+
+            if (isSubmitted()) {
+                $post = request()->posts();
+                if (!empty($post['btn_search_user_identification'])) {
+                    $userId = $post['user_identification'];
+                    $userSearched = $this->userModel->get([
+                        'user_identification' => $userId,
+                        'user_type' => UserService::STUDENT
+                    ]);        
+
+                    if(!$userSearched) {
+                        Flash::set("Student {$userId} not found", 'danger');
+                        return request()->return();
+                    }
+                }
+            }
             
             switch($page)
             {
                 case 'feeds' :
-                    $feedModel = model('FeedModel');
-                    $this->data['feeds'] = $feedModel->all([
-                        'parent_key' => 'Classroom',
+                    $this->data['feeds'] = $this->feedModel->all([
+                        'parent_key' => CommonService::CLASSKEY,
                         'parent_id' => $id
-                    ]);
+                    ], 'id desc');
                     $this->data['pagePath'] = 'classroom/show_inc/feeds';
+                break;
+
+                case 'feed_create':
+                    $feedForm = new FeedForm();
+                    $feedForm->setValue('parent_id', $id);
+                    $feedForm->setValue('parent_key', CommonService::CLASSKEY);
+
+                    $this->data['feedForm'] = $feedForm;
+                    $this->data['pagePath'] = 'classroom/show_inc/feed_create';
+                break;
+
+                case 'feed_show':
+                    $feed = $this->feedModel->get($req['feedId']);
+                    $feedForm = new FeedForm();
+                    $feedForm->setValue('parent_id', $id);
+                    $feedForm->setValue('parent_key', CommonService::CLASSKEY);
+
+                    $this->data['feedForm'] = $feedForm;
+                    $this->data['feed'] = $feed;
+                    $this->data['pagePath'] = 'classroom/show_inc/feed_show';
                 break;
 
                 case 'students' :
                     $this->data['pagePath'] = 'classroom/show_inc/students';
                     $this->data['students'] = $this->model->getStudents($id);
+                break;
+
+                case 'students_add' :
+                    $this->data['pagePath'] = 'classroom/show_inc/students_add';
+                    $this->data['students'] = $this->model->getStudents($id);
+                    $this->data['userSearched'] = $userSearched ?? null;
                 break;
 
                 case 'parents' :
@@ -158,5 +202,45 @@ use Services\UserService;
             $this->data['teachers'] = arr_layout_keypair($teachers, ['id', 'firstname@lastname']);
             
             return $this->view('classroom/add_teacher', $this->data);
+        }
+
+        public function addStudent($id) {
+            $req = request()->inputs();
+            $studentId = $req['studentId'];
+            
+            if (empty($studentId)) {
+                Flash::set("Invalid Request", 'danger');
+                return request()->return();
+            }
+            
+            $studentId = unseal($studentId);
+
+            $res = $this->model->addStudent($studentId, $id);
+
+            if($res) {
+                Flash::set($this->model->getMessageString());
+                if(!empty($req['returnTo'])) {
+                    return redirect(unseal($req['returnTo']));
+                }
+                return redirect(_route('classroom:show', $id, ['page' => 'students']));
+            } else {
+                Flash::set($this->model->getErrorString(),'danger');
+                return redirect(_route('classroom:show', $id, ['page' => 'students']));
+            }
+        }
+
+        public function destroy($id) {
+            $classroom = $this->model->delete($id);
+            if(!$classroom) {
+                Flash::set($this->model->getErrorString());
+            } else {
+                Flash::set($this->model->getMessageString());
+            }
+            return redirect(_route('classroom:index'));
+        }
+
+        public function resetJoinCode($id) {
+            $this->model->resetJoinCode($id);
+            return request()->return();
         }
     }
