@@ -42,7 +42,7 @@
 			if(!is_null($id))
 			{
 				//change password also
-				if( empty($fillable_datas['password']) )
+				if(empty($fillable_datas['password']))
 					unset($fillable_datas['password']);
 				$res = parent::update($fillable_datas , $id);
 				if( isset($user_data['profile']) ){
@@ -51,9 +51,7 @@
 				$user_id = $id;
 			}else
 			{
-				$password = random_letter(6);
 				$fillable_datas['user_identification'] = $this->generateCode();
-				$fillable_datas['password'] = $password;
 				$user_id = parent::store($fillable_datas);
 				// $this->sendCredential($user_id);
 			}
