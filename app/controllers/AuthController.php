@@ -31,7 +31,7 @@
 					return request()->return();
 				}else
 				{
-					Flash::set( "Welcome Back !" . auth('first_name'));
+					Flash::set( "Welcome Back !" . auth('firstname'));
 				}
 
 				return redirect('DashboardController');
