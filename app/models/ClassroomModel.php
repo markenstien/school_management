@@ -139,7 +139,7 @@
                 return false;
             }
 
-            $this->retVal['classroom_id'] = $classroom->id; 
+            $this->retVal['classroom_id'] = $classroomId; 
             $this->addMessage("Student Successfully joined the classroom");
 
             return $isOk;
