@@ -167,7 +167,7 @@
              */
 
             if (isSubmitted()) {
-                $res = $this->model->joinByCode($req['join_code'], 1);
+                $res = $this->model->joinByCode($req['join_code'], whoIs('id'));
 
                 if(!$res) {
                     Flash::set($this->model->getErrorString(), 'danger');

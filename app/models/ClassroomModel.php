@@ -1,4 +1,7 @@
 <?php
+    use Services\UserService;
+    load(['UserService'], SERVICES);
+    
     class ClassroomModel extends Model
     {
         public $table = 'classrooms';
@@ -126,7 +129,16 @@
         public function addStudent($studentId, $classroomId) {
             //load student join
             $classStudentModel = model('ClassStudentModel');
-            
+            $userModel = model('UserModel');
+
+            //check if studentId is really a student
+
+            $user = $userModel->get($studentId);
+
+            if (!isEqual($user->user_type, UserService::STUDENT)) {
+                $this->addError("This account is not student, adding to user to class failed.");
+                return false;
+            }
             //check if student already exists
             $isOk = $classStudentModel->join([
                 'student_id' => $studentId,
