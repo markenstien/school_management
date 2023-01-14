@@ -1,10 +1,12 @@
+
+<div class="sub-header">
 <h4>Add Student</h4>
 <?php
 	echo wLinkDefault(_route('classroom:show', $id, [
 	'page' => 'students'
 	]), 'Students');
 ?>
-
+</div>
 <?php if(is_null($userSearched)) :?>
 <?php
 	Form::open([

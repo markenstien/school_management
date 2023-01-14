@@ -1,8 +1,10 @@
-<h4>Tasks</h4>
-<?php
-    if(isTeacher() || isAdmin()) 
-        echo wLinkDefault(_route('classroom:show',$id, ['page' => 'task_create']) , 'Create');
-?>
+<div class="sub-header">
+    <h4>Tasks</h4>
+    <?php
+        if(isTeacher() || isAdmin()) 
+            echo wLinkDefault(_route('classroom:show',$id, ['page' => 'task_create']) , 'Create');
+    ?>
+</div>
 
 <div class="table-responsive">
     <table class="table table-bordered">

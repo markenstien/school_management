@@ -52,8 +52,8 @@
 				if(empty($fillable_datas['password']))
 					unset($fillable_datas['password']);
 
-				$this->uploadProfile('profile' , $id);
 				if(!empty($fillable_datas['profile'])){
+					$this->uploadProfile('profile' , $id);
 					unset($fillable_datas['profile']);
 				}
 				$res = parent::update($fillable_datas , $id);
@@ -175,6 +175,9 @@
 			] , $id);
 
 			if($res) {
+				if(isEqual(whoIs('id'), $id)) {
+					$this->startAuth($id);
+				}
 				$this->addMessage("Profile uploaded!");
 				return true;
 			}
@@ -226,7 +229,7 @@
 
 		public function generateCode()
 		{
-			return referenceSeries(parent::lastId() + 1, 5);
+			return referenceSeries(parent::lastId() + 1, 3, random_number(3).'-', date('y'));
 		}
 
 
@@ -266,7 +269,7 @@
 
 			$auth = null;
 
-			while( is_null($auth) )
+			while(is_null($auth))
 			{
 				Session::set('auth' , $user);
 				$auth = Session::get('auth');
@@ -359,5 +362,46 @@
 				$summary['gender']['female_percentage'] = ($summary['gender']['female'] / $gender_total) * 100;
 
 			return $summary;
+		}
+
+		public function addChild($parent_id, $user_identification) {
+
+			$user_identification = trim($user_identification);
+
+			$parent = parent::get($parent_id);
+			if(!isEqual($parent->user_type, UserService::PARENT)) {
+				$this->addError("Incorrect Parent User Type");
+				return false;
+			}
+
+			$student = parent::single([
+				'user_identification' => $user_identification
+			]);
+
+			if(!$student) {
+				$this->addError("Student {$user_identification} does not exists.");
+				return false;
+			}	
+
+			if(!isset($this->childrenModel)) {
+				$this->childrenModel = model('ChildrenModel');
+			}
+
+			$isChildAdded = $this->childrenModel->addChild($parent->id, $student->id);
+
+			if(!$isChildAdded) {
+				$this->addError($this->childrenModel->getErrorString());
+				return false;
+			}
+			
+			return true;
+		}
+
+		public function getChildren($id) {
+			if(!isset($this->childrenModel)) {
+				$this->childrenModel = model('ChildrenModel');
+			}
+
+			return $this->childrenModel->getChildren($id);
 		}
 	}

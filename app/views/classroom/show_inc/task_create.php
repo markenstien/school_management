@@ -1,6 +1,6 @@
-<div>
+<div class="sub-header">
     <h4>Task Form</h4>
-    <?php echo $taskForm->start()?> 
-        <?php echo $taskForm->getFormItems()?>
-    <?php echo $taskForm->end()?>
 </div>
+<?php echo $taskForm->start()?> 
+    <?php echo $taskForm->getFormItems()?>
+<?php echo $taskForm->end()?>

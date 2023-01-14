@@ -49,15 +49,14 @@
                                         Form::submit('btn_approve', 'APPROVE', ['class' => 'btn btn-primary btn-sm']);
                                         Form::submit('btn_decline', 'DECLINE', ['class' => 'btn btn-danger btn-sm']);
                                     ?>
-                                    <?php echo wDivider()?>
-
-                                    <a href="<?php echo _route('task-sub:delete', $taskSub->id, [
+                                    <?php echo wDivider(20)?>
+                                    <?php echo wLinkDefault(_route('task-sub:delete', $taskSub->id, [
                                         'returnTo' => seal(_route('classroom:show', $task->parent_id, [
                                             'page' => 'task_show',
                                             'taskId' => $task->id
                                         ]))
-                                        ])?>" 
-                                        class="btn btn-danger btn-sm form-verify">Delete</a>
+                                        ]), 'Delete')
+                                    ?>
                                 </td>
                             </tr>
                         </table>

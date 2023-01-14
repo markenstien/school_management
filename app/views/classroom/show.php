@@ -1,5 +1,5 @@
 <?php build('content') ?>
-<div class="card">
+<div class="card theme-main">
     <div class="card-header">
         <div class="row">
             <div class="col-md-6">

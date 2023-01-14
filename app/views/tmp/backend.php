@@ -13,11 +13,11 @@ License: For each use you must have a valid license purchased only from above li
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="description" content="Responsive HTML Admin Dashboard Template based on Bootstrap 5">
-	<meta name="author" content="NobleUI">
-	<meta name="keywords" content="nobleui, bootstrap, bootstrap 5, bootstrap5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+  <meta name="description" content="<?php echo DESCRIPTION?>">
+	<meta name="author" content="<?php echo COMPANY_NAME?>">
+	<meta name="keywords" content="<?php echo KEY_WORDS?>>
 
-	<title>NobleUI - HTML Bootstrap 5 Admin Dashboard Template</title>
+	<title><?php echo $pageTitle ?? COMPANY_NAME?></title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,6 +39,7 @@ License: For each use you must have a valid license purchased only from above li
   <link rel="stylesheet" href="<?php echo _path_tmp('assets/css/demo1/style.css')?>">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="<?php echo _path_tmp('assets/images/favicon.png')?>" />
+  <link rel="stylesheet" href="<?php echo _path_public('css/main/global.css')?>">
 
   <style>
     .form-group {

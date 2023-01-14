@@ -1,7 +1,7 @@
-<nav class="sidebar">
-    <div class="sidebar-header">
+<nav class="sidebar" >
+    <div class="sidebar-header" style="background-color: #285430;">
     <a href="#" class="sidebar-brand">
-        Noble<span>UI</span>
+        <span class="text-white"><?php echo COMPANY_NAME?></span>
     </a>
     <div class="sidebar-toggler not-active">
         <span></span>

@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200&display=swap');
 
 :root {
-  --main-color: #007FFF;
+  --main-color: #153462;
   --color-warning : #FF642E;
   --color-danger : #D83A56;
   --color-success : #29CC97;
@@ -13,7 +13,7 @@
 body
 {
 	background: var(--color-base);
-	font-family: 'Montserrat', 'Ubuntu' ,sans-serif;
+	/* font-family: 'Montserrat', 'Ubuntu' ,sans-serif; */
 }
 
 .table{
@@ -34,6 +34,7 @@ form label
 	color: #000 !important;
 }
 
+
 /*div.card .card-header{
 	background: #D4D3D3 !important;
 }
@@ -53,28 +54,51 @@ form label
 }
 
 
-div.card 
+/* div.card 
 {
 	background: #F5F0F0 !important;
+} */
+
+
+
+div.card.theme-main > div.card-header{
+	background-color: var(--main-color);
+	color:#fff;
 }
 
-div.card-theme-blue .card-header{
+div.card.theme-main > div.card-header > a {
+	color: var(--color-base);
+}
+
+div.card > div.card-body > div.sub-header  {
+	background-color: #285430;
+	color: #fff;
+	padding: 12px;
+}
+
+div.card > div.card-body > div.sub-header > a {
+	color: var(--color-base);
+	display: block;
+	margin-top: 12px !important;
+}
+
+/* div.card-theme-blue .card-header{
 	background: #31326f !important;
 	color: #fff !important;
-}
+} */
 
-div.card-theme-blue .card-title{
+/* div.card-theme-blue .card-title{
 	color: #fff !important;
-}
+} */
 
 .card .card-theme-default
 {
 
 }
 
-div.card-theme-default .card-header{
+/* div.card-theme-default .card-header{
 	background: #fff !important;
-}
+} */
 
 
 div.navigationbar
@@ -149,3 +173,5 @@ div.navigationbar ul li a,
 {
 	background: #fff !important;
 }
+
+

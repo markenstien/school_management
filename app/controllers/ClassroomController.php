@@ -59,7 +59,7 @@
                 if (!empty($post['btn_search_user_identification'])) {
                     $userId = $post['user_identification'];
                     $userSearched = $this->userModel->get([
-                        'user_identification' => $userId,
+                        'user_identification' => trim($userId),
                         'user_type' => UserService::STUDENT
                     ]);        
 
@@ -67,6 +67,22 @@
                         Flash::set("Student {$userId} not found", 'danger');
                         return request()->return();
                     }
+                }
+
+                if(!empty($post['btn_add_comment'])) {
+                    $this->feedModel->addComment([
+                        'feed_id' => $post['feed_id'],
+                        'user_id' => whoIs('id'),
+                        'thread_id' => $post['thread_id'] ?? '',
+                        'replied_to' => $psot['replied_to'] ??  '',
+                        'comment' => $post['comment']
+                    ]);
+
+                    Flash::set("Comment Added");
+                    return redirect(_route('classroom:show', $id, [
+                        'page' => 'feed_show',
+                        'feedId' => $post['feed_id']
+                    ]));
                 }
             }
             
@@ -95,8 +111,12 @@
                     $feedForm->setValue('parent_id', $id);
                     $feedForm->setValue('parent_key', CommonService::CLASSKEY);
 
+                    $comments = $this->feedModel->getComments($req['feedId']);
+                    
                     $this->data['feedForm'] = $feedForm;
                     $this->data['feed'] = $feed;
+                    $this->data['comments'] = $comments;
+
                     $this->data['pagePath'] = 'classroom/show_inc/feed_show';
                 break;
 
@@ -215,7 +235,7 @@
             
             $studentId = unseal($studentId);
 
-            $res = $this->model->addStudent($studentId, $id);
+            $res = $this->model->addStudent(trim($studentId), $id);
 
             if($res) {
                 Flash::set($this->model->getMessageString());

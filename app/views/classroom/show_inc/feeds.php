@@ -1,5 +1,7 @@
-<h4>Feeds</h4>
-<?php echo wLinkDefault(_route('classroom:show', $id, ['page' => 'feed_create']), 'Create Feed')?>
+<div class="sub-header">
+    <h4>Feeds</h4>
+    <?php echo wLinkDefault(_route('classroom:show', $id, ['page' => 'feed_create']), 'Create Feed')?>
+</div>
 
 <div id="feed" style="display: none">
     <?php grab('tmp/inc/form_feed',[

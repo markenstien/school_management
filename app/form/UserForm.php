@@ -51,14 +51,13 @@
 				'type' => 'text',
 				'name' => 'user_identification',
 				'class' => 'form-control',
-				'required' => true,
 				'options' => [
-					'label' => 'User ID'
+					'label' => 'User ID (Optional)'
 				],
 
 				'attributes' => [
 					'id' => 'student_id',
-					'placeholder' => 'User ID'
+					'placeholder' => 'Will be auto genereated if empty'
 				]
 			]);
 		}

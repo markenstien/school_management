@@ -81,4 +81,25 @@
 
             return $this->db->resultSet();
         }
+        /**
+         * comment-data values
+         * comment
+         * feed_id
+         * user_id
+         */
+        public function addComment($commentData) {
+            if(!isset($this->feedCommentModel)) {
+                $this->feedCommentModel = model('FeedCommentModel');
+            }
+
+            return $this->feedCommentModel->addComment($commentData);
+        }
+
+        public function getComments($feedId) {
+            if(!isset($this->feedCommentModel)) {
+                $this->feedCommentModel = model('FeedCommentModel');
+            }
+
+            return $this->feedCommentModel->getComments($feedId);
+        }
     }

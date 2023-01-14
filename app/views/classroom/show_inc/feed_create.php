@@ -1,5 +1,7 @@
-<h4>Create Feed</h4>
-<?php echo wLinkDefault(_route('classroom:show', $id, ['page' => 'feeds']), 'Feeds')?>
+<div class="sub-header">
+	<h4>Create Feed</h4>
+	<?php echo wLinkDefault(_route('classroom:show', $id, ['page' => 'feeds']), 'Feeds')?>
+</div>
 
 <?php echo $feedForm->start([
 	'enctype' => 'multipart/form-data',

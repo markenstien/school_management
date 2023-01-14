@@ -1,11 +1,13 @@
-<h4>Students</h4>
-<?php
-    if(isAdmin() || isTeacher()) {
-         echo wLinkDefault(_route('classroom:show', $id, [
-            'page' => 'students_add'
-        ]), 'Add Student');
-    }
-?>
+<div class="sub-header">
+    <h4>Students</h4>
+    <?php
+        if(isAdmin() || isTeacher()) {
+            echo wLinkDefault(_route('classroom:show', $id, [
+                'page' => 'students_add'
+            ]), 'Add Student');
+        }
+    ?>
+</div>
 
 <div class="table-responsive">
     <table class="table table-bordered">

@@ -1,5 +1,5 @@
 <!-- partial:partials/_navbar.html -->
-<nav class="navbar">
+<nav class="navbar" style="background-color: #285430;">
     <a href="#" class="sidebar-toggler">
         <i data-feather="menu"></i>
     </a>
@@ -7,7 +7,7 @@
         <ul class="navbar-nav">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i data-feather="mail"></i>
+                    <i data-feather="mail" style="color:#fff"></i>
                 </a>
                 <div class="dropdown-menu p-0" aria-labelledby="messageDropdown">
                     <div class="px-3 py-2 d-flex align-items-center justify-content-between border-bottom">
@@ -83,7 +83,7 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i data-feather="bell"></i>
+                    <i data-feather="bell" style="color:#fff"></i>
                     <div class="indicator">
                         <div class="circle"></div>
                     </div>
@@ -147,12 +147,12 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="wd-30 ht-30 rounded-circle" src="https://via.placeholder.com/30x30" alt="profile">
+                    <img class="wd-30 ht-30 rounded-circle" src="<?php echo whoIs('profile')?>" alt="profile">
                 </a>
                 <div class="dropdown-menu p-0" aria-labelledby="profileDropdown">
                     <div class="d-flex flex-column align-items-center border-bottom px-5 py-3">
                         <div class="mb-3">
-                            <img class="wd-80 ht-80 rounded-circle" src="https://via.placeholder.com/80x80" alt="">
+                            <img class="wd-80 ht-80 rounded-circle" src="<?php echo whoIs('profile')?>" alt="">
                         </div>
                         <div class="text-center">
                             <p class="tx-16 fw-bolder"><?php echo whoIs('firstname')?></p>
@@ -161,21 +161,9 @@
                     </div>
     <ul class="list-unstyled p-1">
         <li class="dropdown-item py-2">
-        <a href="<?php echo _route('user:show', whoIs('id'))?>?>" class="text-body ms-0">
+        <a href="<?php echo _route('user:show', whoIs('id'))?>" class="text-body ms-0">
             <i class="me-2 icon-md" data-feather="user"></i>
             <span>Profile</span>
-        </a>
-        </li>
-        <li class="dropdown-item py-2">
-        <a href="javascript:;" class="text-body ms-0">
-            <i class="me-2 icon-md" data-feather="edit"></i>
-            <span>Edit Profile</span>
-        </a>
-        </li>
-        <li class="dropdown-item py-2">
-        <a href="javascript:;" class="text-body ms-0">
-            <i class="me-2 icon-md" data-feather="repeat"></i>
-            <span>Switch User</span>
         </a>
         </li>
         <li class="dropdown-item py-2">

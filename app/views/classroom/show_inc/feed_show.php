@@ -39,25 +39,46 @@
                 ])?>" 
                 class="btn btn-danger btn-sm">Delete</a>
         </div>
+            <!-- COMMENTS -->
+        
+        <?php echo wDivider(30)?>
+        <section>
+            <div class="comments">
+            <?php if(empty($comments)) :?>
+                <p class="text-center">There are no comments here..</p> 
+                <?php else:?>
+                    <h4>Comments</h4>
+                    <?php foreach($comments as $key => $row):?>
+                        <div class="card">
+                           <div class="card-footer">
+                            <small><strong><?php echo $row->commentor?></strong></small>
+                            <p><?php echo $row->comment?></p> 
+                            <small style="color:#9F8772"><?php echo time_since($row->created_at)?></small>     
+                           </div>                  
+                        </div>
+                    <?php endforeach?>
+            <?php endif?>
+            </div>
+        </section>
     </div>
 
     <div class="col-md-5">
-        <!-- ADD COMMENT SECTION -->
-        <section>
-            <?php
-                Form::small('Add Comment');
-                Form::textarea('', '' , ['class' => 'form-control','rows' => 2]);
-                Form::file('file');
-            ?>
-            <div><?php Form::submit('btn_add_comment', 'Add Comment');?></div>
-        </section>
+        <?php
+            Form::open([
+                'method' => 'post'
+            ]);
 
-        <!-- COMMENTS -->
-
-        <section>
-            <div class="comments">
-                
-            </div>
-        </section>
+            Form::hidden('feed_id', $feed->id);
+        ?>
+            <!-- ADD COMMENT SECTION -->
+            <section>
+                <?php
+                    Form::small('Add Comment');
+                    Form::textarea('comment', '' , ['class' => 'form-control','rows' => 2]);
+                    Form::file('file');
+                ?>
+                <div><?php Form::submit('btn_add_comment', 'Add Comment');?></div>
+            </section>
+        <?php Form::close()?>
     </div>
 </div>

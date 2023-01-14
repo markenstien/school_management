@@ -1,6 +1,8 @@
 <?php 
 	load(['UserForm'] , APPROOT.DS.'form');
 	use Form\UserForm;
+use Services\UserService;
+
 	class UserController extends Controller
 	{
 
@@ -84,6 +86,7 @@
 			$this->data['user_form']->setValueObject($user);
 			$this->data['user_form']->addId($id);
 			$this->data['user_form']->remove('submit');
+			$this->data['user_form']->remove('user_identification');
 			$this->data['user_form']->add([
 				'name' => 'password',
 				'type' => 'password',
@@ -101,6 +104,7 @@
 
 		public function show($id)
 		{
+			$req = request()->inputs();
 			$user = $this->model->get($id);
 
 			if(!$user) {
@@ -110,6 +114,26 @@
 
 			$this->data['user'] = $user;
 			
+			if(isSubmitted()) {
+				$post = request()->posts();
+				if(isset($req['add_child'])) {
+					$childUserIdentification = $post['user_identification'];
+					$result = $this->model->addChild($id, $childUserIdentification);
+
+					if(!$result) {
+						Flash::set($this->model->getErrorString());
+						return request()->return();
+					} else {
+						Flash::set('Child added');
+						return redirect(_route('user:show', $id));
+					}
+				}
+			}
+			if(isEqual($user->user_type, UserService::PARENT)) {
+				$this->data['action'] = $req['action'] ?? '';
+				$this->data['children'] = $this->model->getChildren($id);
+				return $this->view('user/parent', $this->data);
+			}
 			return $this->view('user/show' , $this->data);
 		}
 
@@ -117,6 +141,15 @@
 		{
 			$this->model->sendCredential($id);
 			Flash::set("Credentials has been set to the user");
+			return request()->return();
+		}
+
+		public function deleteChild($child_id) {
+
+			if(!isset($this->childrenModel)) {
+				$this->childrenModel = model('ChildrenModel');
+			}
+			$this->childrenModel->delete($child_id);
 			return request()->return();
 		}
 	}

@@ -1,6 +1,6 @@
 <?php build('content') ?>
 	
-	<div class="card">
+	<div class="card theme-main">
 		<div class="card-header">
 			<h4 class="card-title">Edit User</h4>
 		</div>
