@@ -15,7 +15,7 @@ License: For each use you must have a valid license purchased only from above li
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="description" content="<?php echo DESCRIPTION?>">
 	<meta name="author" content="<?php echo COMPANY_NAME?>">
-	<meta name="keywords" content="<?php echo KEY_WORDS?>>
+	<meta name="keywords" content="<?php echo KEY_WORDS?>">
 
 	<title><?php echo $pageTitle ?? COMPANY_NAME?></title>
 
