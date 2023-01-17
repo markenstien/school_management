@@ -404,4 +404,12 @@
 
 			return $this->childrenModel->getChildren($id);
 		}
+
+		public function getParent($id) {
+			if(!isset($this->childrenModel)) {
+				$this->childrenModel = model('ChildrenModel');
+			}
+
+			return $this->childrenModel->getParent($id);
+		}
 	}

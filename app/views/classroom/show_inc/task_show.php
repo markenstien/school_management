@@ -1,7 +1,7 @@
 <div>
     <h4>Task Preview #<?php echo $task->task_reference?></h4>
     <?php
-    if(isTeacher() || isAdmin()) 
+    if(isTeacher()) 
         echo wLinkDefault(_route('task:edit', $task->id, [
             'returnTo' => seal(_route('classroom:show', $task->parent_id, ['page' => 'tasks']))
         ]));
@@ -53,7 +53,7 @@
                     </tr>
                     <tr>
                         <td>Total Submitted</td>
-                        <td>N/A</td>
+                        <td><?php echo $task->total_submission?></td>
                     </tr>
                     
                 </table>
@@ -61,11 +61,17 @@
         </div>
     </div>
 </div>
-<?php echo wDivider()?>
+<?php echo wDivider(30)?>
 <div>
     <h4>Submissions</h4>
-    <button class="btn btn-warning btn-sm">Fetch Exam Result</button>
-    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampResultModal">Upload Exam Result</button>
+        <?php 
+            if(isStudent()) {
+                echo wLinkDefault('#', 'Upload Exam Result', [
+                    'data-bs-toggle' => 'modal',
+                    'data-bs-target' => '#exampResultModal'
+                ]);
+            }
+        ?>
 
     <div class="table-responsive">
         <table class="table table-bordered">

@@ -15,6 +15,10 @@
                 $post = request()->posts();
                 $submitId = $this->model->createOrUpdate($post);
 
+                if(!$submitId) {
+                    Flash::set($this->model->getErrorString(), 'danger');
+                    return redirect(unseal($req['returnTo']));
+                }
                 if(!upload_empty('file')) {
                     $this->_attachmentModel->upload([
                         'global_key' => $post['global_key'],

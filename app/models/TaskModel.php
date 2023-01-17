@@ -20,6 +20,40 @@ use function PHPSTORM_META\map;
             'start_date'
         ];
 
+
+        public function get($id) {
+            return $this->getAll([
+                'where' => ['task.id' => $id]
+            ])[0] ?? false;
+        }
+        public function getAll($params = []) {
+            $where = null;
+            $order = null;
+            $limit = null;
+
+            if(!empty($params['where'])) {
+                $where = " WHERE ".parent::conditionConvert($params['where']);
+            }
+
+            if(!empty($params['order'])) {
+                $order = " ORDER BY {$params['order']}";
+            }
+
+            if(!empty($params['limit'])) {
+                $limit = " LIMIT {$params['limit']}";
+            }
+
+            $this->db->query(
+                "SELECT task.*, ifnull(v_total_submission.total,0) as total_submission 
+                    FROM {$this->table} as task
+                    LEFT JOIN v_total_submission 
+                    ON v_total_submission.task_id = task.id
+                    {$where} {$order} {$limit}"
+            );
+
+            return $this->db->resultSet();
+        }
+
         public function createOrUpdate($taskData, $id = null) {
             $_fillables = parent::getFillablesOnly($taskData);
             

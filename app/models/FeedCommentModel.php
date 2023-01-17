@@ -20,7 +20,7 @@
 
             $this->db->query(
                 "SELECT concat(commentor.firstname, ' ',commentor.lastname) as commentor,
-                    {$this->table}.* 
+                    commentor.user_type as commentor_type, {$this->table}.* 
                     FROM {$this->table}
                     
                     LEFT JOIN users as commentor

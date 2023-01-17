@@ -16,7 +16,9 @@
             <th width="15%">Student Id</th>
             <th>Name</th>
             <th>Gender</th>
+            <?php if(isTeacher() || isAdmin()) :?>
             <th>Action</th>
+            <?php endif?>
         </thead>
 
         <tbody>
@@ -26,10 +28,12 @@
                     <td><?php echo $row->user_identification?></td>
                     <td><?php echo $row->firstname . ' ' . $row->lastname?></td>
                     <td><?php echo $row->gender?></td>
+                    <?php if(isTeacher() || isAdmin()) :?>
                     <td>
                         <?php echo wLinkDefault(_route('user:show', $row->id), 'Show')?>
                         <?php echo wLinkDefault(_route('class-student:delete', $row->class_student_id), 'Delete')?>
                     </td>
+                    <?php endif?>
                 </tr>
             <?php endforeach?>
         </tbody>

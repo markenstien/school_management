@@ -42,7 +42,9 @@
                     <?php foreach($tasks as $task) :?>
                         <td class="text-center">
                             <?php echo $task->task_reference?>
-                            <div>PS(<?php echo $task->passing_score?>)</div>
+                            <div>
+                                <small><?php echo $task->start_date?></small> </br>
+                            </div>
                         </td>
                     <?php endforeach?>
                 </tbody>
@@ -82,13 +84,19 @@
     }
 
     function wPrintResult($result = null) {
-        if($result == 'pass nothing') {
+        if($result == 'pass nothing' || $result == null) {
             ?> 
                 <span class="badge badge-warning">N/A</span>
             <?php
         } else {
+            $badgeColor = 'primary';
+                if(isEqual($result->status,'approved')) {
+                    $badgeColor = 'success';
+                } else if(isEqual($result->status,'unapproved')) {
+                    $badgeColor = 'danger';
+                }
             ?>
-                <span class="badge badge-primary">
+                <span class="badge badge-<?php echo $badgeColor?>" title="<?php echo $result->status?>">
                     <?php echo $result->user_score?>/<?php echo $result->passing_score?>
                 </span>
             <?php

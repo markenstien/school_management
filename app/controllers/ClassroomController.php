@@ -28,21 +28,26 @@
                 $this->studentClassModel = model('ClassStudentModel');
                 switch(whoIs('user_type')) {
                     case UserService::TEACHER:
-                        $this->data['classrooms'] = $this->model->all([
-                            'teacher_id' => whoIs('id')
+                        $this->data['classrooms'] = $this->model->getAll([
+                            'where' => [
+                                'teacher_id' => whoIs('id')
+                            ]
                         ], 'id desc');
                     break;
-
 
                     case UserService::STUDENT:
                         $classroomIds = $this->studentClassModel->getStudentClassIds(whoIs('id'));
                         if(!empty($classroomIds)) {
-                            $this->data['classrooms'] = $this->model->all([
-                                'id' => [
-                                    'condition' => 'in',
-                                    'value' => $classroomIds
+                            $this->data['classrooms'] = $this->model->getAll([
+                                'where' => [
+                                    'cr.id' => [
+                                        'condition' => 'in',
+                                        'value' => $classroomIds
+                                    ]
                                 ]
                             ], 'id desc');
+                        } else {
+                            return $this->join();
                         }
                     break;
 
@@ -62,17 +67,21 @@
                         }
 
                         if(!empty($classroomIds)) {
-                            $this->data['classrooms'] = $this->model->all([
-                                'id' => [
-                                    'condition' => 'in',
-                                    'value' => $classroomIds
-                                ]
+                            $this->data['classrooms'] = $this->model->getAll([
+                                ['where' => [
+                                    'id' => [
+                                        'condition' => 'in',
+                                        'value' => $classroomIds
+                                    ]
+                                ]]
                             ], 'id desc');
                         }
                     break;
                 }
             } else {
-                $this->data['classrooms'] = $this->model->all(null, 'id desc');
+                $this->data['classrooms'] = $this->model->getAll([
+                    'order' => 'cr.id desc'
+                ]);
             }
             return $this->view('classroom/index', $this->data);
         }
@@ -135,6 +144,7 @@
                 }
 
                 if(!empty($post['btn_performance'])) {
+
                     $tasks = $this->taskModel->all([
                         'start_date' => [
                             'condition' => 'between',
@@ -144,7 +154,6 @@
                         'parent_id' => $id
                     ]); 
 
-                    $students = $this->model->getStudents($id);
                     /**
                      * task-id => [list of ta tasks //key is userid]
                      */
@@ -167,6 +176,36 @@
                             ]
                         ]);
 
+                        if(isStudent()) {
+                            $students = [$this->userModel->get(whoIs('id'))];
+                        }
+                        
+                        if(isAdmin() || isTeacher()) {
+                            $students = $this->model->getStudents($id);
+                        }
+
+                        if(isParent()) {
+                            $children = $this->userModel->getChildren(whoIs('id'));
+                            $childIds = [];
+                            
+                            if(!empty($children)) {
+                                foreach($children as $child) {
+                                    $childIds [] = $child->child_id;
+                                }
+                                $students = $this->userModel->getAll([
+                                    'where' => [
+                                        'id' => [
+                                            'condition' => 'in',
+                                            'value' => $childIds
+                                        ]
+                                    ]
+                                ]);
+
+                            } else {
+                                $students = [];
+                            }
+                        }
+
                         foreach($taskSubmissions as $taskSub) {
                             if(!isset($taskSubmissionFormatted[$taskSub->task_id])) {
                                 $taskSubmissionFormatted[$taskSub->task_id] = [];
@@ -182,7 +221,6 @@
                     $this->data['students'] = $students;
                     $this->data['taskSubmissions'] = $taskSubmissions;
                     $this->data['taskSubmissionFormatted'] = $taskSubmissionFormatted;
-
                     $this->data['pageData'] = 'classroom/show_inc/performance';
                 }
             }
@@ -237,7 +275,8 @@
                 break;
 
                 case 'tasks' :
-                    $this->data['tasks']   = $this->taskModel->all(['parent_id' => $id],'id desc');
+                    $this->data['tasks']   = $this->taskModel->getAll(['where' => ['parent_id' => $id]],'task.start_date desc');
+                    $this->data['totalStudent'] = count($this->model->getStudents($id));
                     $this->data['pagePath'] = 'classroom/show_inc/tasks';
                 break;
 

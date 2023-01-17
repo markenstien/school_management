@@ -12,3 +12,13 @@ create table classrooms(
     theme char(5),
     updated_at timestamp DEFAULT now() ON UPDATE now()
 );
+
+/*
+*class room views
+*/
+
+drop view v_total_student;
+
+CREATE VIEW v_total_student as SELECT count(id) as total, class_id
+    FROM class_students
+    GROUP BY class_id;

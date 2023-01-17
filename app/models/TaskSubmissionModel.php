@@ -10,6 +10,20 @@
 
         public function createOrUpdate($data, $id = null) {
             $_fillables = parent::getFillablesOnly($data);
+            //check if exist
+
+            if(isset($data['task_id'], $data['user_id'])) {
+                $isSubmitted = parent::single([
+                    'task_id' => $data['task_id'],
+                    'user_id' => $data['user_id']
+                ]);
+
+                if($isSubmitted) {
+                    $this->addError("You already submitted result");
+                    return false;
+                }
+            }
+
             if(is_null($id)) {
                 return parent::store($_fillables);
             }else{

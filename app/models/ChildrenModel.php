@@ -39,4 +39,23 @@
 
             return $this->db->resultSet();
         }
+
+        public function getParent($child_id) {
+            $this->db->query(
+                "SELECT children.id as id, concat(parent.firstname, ' ' ,parent.lastname) as parent_name,
+                    concat(child.firstname, ' ' ,child.lastname) as child_name,
+                    parent.id as parent_id, child.id as child_id
+
+                    FROM {$this->table}
+
+                    LEFT JOIN users as parent 
+                    ON parent.id = children.parent_id
+                    
+                    LEFT JOIN users as child
+                    ON child.id = children.child_id
+                    WHERE children.child_id = '{$child_id}' "
+            );
+
+            return $this->db->resultSet()[0] ?? false;
+        }
     }

@@ -21,7 +21,7 @@
                         <th>Class Code</th>
                         <th>Class Name</th>
                         <th>Teacher</th>
-                        <th>Status</th>
+                        <th>Total Student</th>
                         <th>Action</th>
                     </thead>
 
@@ -32,8 +32,8 @@
                                 <td><?php echo $row->reference_code?></td>
                                 <td><?php echo $row->class_code?></td>
                                 <td><?php echo $row->class_name?></td>
-                                <td><?php echo $row->teacher_id?></td>
-                                <td><?php echo $row->is_active?></td>
+                                <td><?php echo $row->teacher_name ?? 'N/A'?></td>
+                                <td><?php echo $row->total_student?></td>
                                 <td><?php echo wLinkDefault(_route('classroom:show', $row->id), 'Show')?></td>
                             </tr>
                         <?php endforeach?>

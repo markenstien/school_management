@@ -18,3 +18,15 @@ create table tasks(
 
 alter table tasks 
     add column start_date date;
+
+
+
+/**
+*create view
+*/
+
+drop view v_total_submission;
+
+CREATE VIEW v_total_submission as SELECT count(id) as total, task_id from 
+    task_submissions
+    GROUP BY task_id 

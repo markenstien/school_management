@@ -31,13 +31,15 @@
                    </div>
                 </div>
             </div>
-            <?php echo wDivider(20)?>
-            <a href="<?php echo _route('feed:delete', $feed->id, [
-                    'returnTo' => seal(
-                        _route('classroom:show', $id, ['page' => 'feeds'])
-                    ),
-                ])?>" 
+            <?php if(isTeacher()) :?>
+                <?php echo wDivider(20)?>
+                <a href="<?php echo _route('feed:delete', $feed->id, [
+                        'returnTo' => seal(
+                            _route('classroom:show', $id, ['page' => 'feeds'])
+                        ),
+                    ])?>" 
                 class="btn btn-danger btn-sm">Delete</a>
+            <?php endif?>
         </div>
             <!-- COMMENTS -->
         
@@ -51,7 +53,7 @@
                     <?php foreach($comments as $key => $row):?>
                         <div class="card">
                            <div class="card-footer">
-                            <small><strong><?php echo $row->commentor?></strong></small>
+                            <small><strong><?php echo $row->commentor?></strong>(<?php echo $row->commentor_type?>)</small>
                             <p><?php echo $row->comment?></p> 
                             <small style="color:#9F8772"><?php echo time_since($row->created_at)?></small>     
                            </div>                  

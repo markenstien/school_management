@@ -1,4 +1,5 @@
 <?php build('content') ?>
+	<h4 class="mb-5"><?php echo $user->firstname . ' ' .$user->lastname?></h4>
 	<?php Flash::show()?>
 	<div class="row">
 		<div class="col-md-4">

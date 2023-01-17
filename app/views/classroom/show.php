@@ -18,8 +18,6 @@
     <div class="row">
         <div class="col-md-2">
             <div class="list-group">
-                <a href="#" 
-                    class="list-group-item list-group-item-action">Main</a>
                 <a href="<?php echo _route('classroom:show',$id, ['page' => 'students'])?>" 
                     class="list-group-item list-group-item-action">Students</a>
                 <a href="<?php echo _route('classroom:show',$id, ['page' => 'tasks'])?>" 
@@ -28,8 +26,10 @@
                     class="list-group-item list-group-item-action">Feeds</a>
                 <a href="<?php echo _route('classroom:show',$id, ['page' => 'performance'])?>" 
                     class="list-group-item list-group-item-action">Performance</a>
+                <?php if(isAdmin() || isTeacher()) :?>
                 <a href="<?php echo _route('classroom:show',$id, ['page' => 'setting'])?>" 
                     class="list-group-item list-group-item-action">Settings</a>
+                <?php endif?>
             </div>
         </div>
 

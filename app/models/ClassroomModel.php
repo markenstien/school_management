@@ -82,7 +82,7 @@
             }
 
             if (isset($params['order'])) {
-                $order = " ORDER {$params['order']}";
+                $order = " ORDER BY {$params['order']}";
             }
 
             if (isset($params['limit'])) {
@@ -91,11 +91,14 @@
 
             $this->db->query(
                 "SELECT cr.*,
-                    concat(teacher.firstname , ' ', teacher.lastname) as teacher_name
+                    concat(teacher.firstname , ' ', teacher.lastname) as teacher_name,
+                    v_total_student.total as total_student
                     FROM {$this->table} as cr 
                     LEFT JOIN users as teacher 
                     ON teacher.id = cr.teacher_id
                     
+                    LEFT JOIN v_total_student 
+                    ON v_total_student.class_id = cr.id
                 {$where}{$order}{$limit}"
             );
 

@@ -1,6 +1,9 @@
 <div class="sub-header">
     <h4>Feeds</h4>
-    <?php echo wLinkDefault(_route('classroom:show', $id, ['page' => 'feed_create']), 'Create Feed')?>
+    <?php 
+        if(isTeacher())
+        echo wLinkDefault(_route('classroom:show', $id, ['page' => 'feed_create']), 'Create Feed')
+    ?>
 </div>
 
 <div id="feed" style="display: none">

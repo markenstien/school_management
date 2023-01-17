@@ -3,6 +3,7 @@
 </div>
 <div class="table-responsive">
     <table class="table table-bordered">
+        <?php if(isAdmin()) :?>
         <tr>
             <td>Teacher</td>
             <td>
@@ -14,6 +15,7 @@
                 ])?></div>
             </td>
         </tr>
+        <?php endif?>
         <tr>
             <td>Join Code</td>
             <td>
