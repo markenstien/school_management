@@ -26,6 +26,8 @@
                     class="list-group-item list-group-item-action">Tasks</a>
                 <a href="<?php echo _route('classroom:show',$id, ['page' => 'feeds'])?>" 
                     class="list-group-item list-group-item-action">Feeds</a>
+                <a href="<?php echo _route('classroom:show',$id, ['page' => 'performance'])?>" 
+                    class="list-group-item list-group-item-action">Performance</a>
                 <a href="<?php echo _route('classroom:show',$id, ['page' => 'setting'])?>" 
                     class="list-group-item list-group-item-action">Settings</a>
             </div>

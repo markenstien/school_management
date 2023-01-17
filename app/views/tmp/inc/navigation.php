@@ -24,7 +24,7 @@
                 <span class="link-title">Classroom</span>
             </a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a href="<?php echo _route('dashboard:index')?>" class="nav-link">
                 <i class="link-icon" data-feather="message-square"></i>
                 <span class="link-title">Announcements</span>
@@ -35,26 +35,33 @@
                 <i class="link-icon" data-feather="message-square"></i>
                 <span class="link-title">NewsFeed</span>
             </a>
-        </li>
-        <li class="nav-item">
-            <a href="<?php echo _route('user:index')?>" class="nav-link">
-                <i class="link-icon" data-feather="message-square"></i>
-                <span class="link-title">Users(temporary)</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="link-icon" data-feather="calendar"></i>
-                <span class="link-title">Teachers</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="link-icon" data-feather="calendar"></i>
-                <span class="link-title">Students</span>
-            </a>
-        </li>
-
+        </li> -->
+        <?php if(isEqual(whoIs('user_type'),'admin')) :?>
+            <li class="nav-item">
+                <a href="<?php echo _route('user:index', ['user_type' => 'teacher'])?>" class="nav-link">
+                    <i class="link-icon" data-feather="calendar"></i>
+                    <span class="link-title">Teachers</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<?php echo _route('user:index', ['user_type' => 'student'])?>" class="nav-link">
+                    <i class="link-icon" data-feather="calendar"></i>
+                    <span class="link-title">Students</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<?php echo _route('user:index', ['user_type' => 'parent'])?>" class="nav-link">
+                    <i class="link-icon" data-feather="calendar"></i>
+                    <span class="link-title">Parents</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<?php echo _route('user:index', ['user_type' => 'admin'])?>" class="nav-link">
+                    <i class="link-icon" data-feather="calendar"></i>
+                    <span class="link-title">Staff</span>
+                </a>
+            </li>
+        <?php endif?>
     </ul>
     </div>
 </nav>

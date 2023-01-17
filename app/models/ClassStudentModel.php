@@ -28,6 +28,28 @@
             }
         }
 
+        public function getStudentClassIds($student_id) {
+            if(is_array($student_id)) {
+                $results = parent::all([
+                    'student_id' => [
+                        'condition' => 'in',
+                        'value' => $student_id
+                    ]
+                ]);
+            } else {
+                $results = parent::all([
+                    'student_id' => $student_id
+                ]);
+            }
+            
+            $retVal = [];
+            foreach($results as $key => $row) {
+                $retVal[] = $row->class_id;
+            }
+
+            return $retVal;
+        }
+
         public function deleteFromClass($classroom_id) {
             return parent::delete([
                 'class_id' => $classroom_id

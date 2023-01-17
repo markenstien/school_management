@@ -24,7 +24,7 @@
                         <td><?php echo $task->status?></td>
                     </tr>
                     <tr>
-                        <td>Task Status</td>
+                        <td>Task Link</td>
                         <td>
                             <a href="<?php echo $task->google_form_link?>">Exam Link</a>
                         </td>
@@ -39,12 +39,13 @@
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <tr>
-                        <td>Start Of Exam</td>
-                        <td><?php echo $task->created_at?></td>
+                        <td>Start Date</td>
+                        <td><?php echo $task->start_date?></td>
                     </tr>
+
                     <tr>
                         <td>Deadline</td>
-                        <td><?php echo $task->created_at?></td>
+                        <td><?php echo date('Y-m-d', strtotime('+2 days '.$task->start_date))?></td>
                     </tr>
                     <tr>
                         <td>Passing Score</td>

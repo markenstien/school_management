@@ -16,7 +16,8 @@ use function PHPSTORM_META\map;
             'description',
             'passing_score',
             'created_by',
-            'created_at'
+            'created_at',
+            'start_date'
         ];
 
         public function createOrUpdate($taskData, $id = null) {

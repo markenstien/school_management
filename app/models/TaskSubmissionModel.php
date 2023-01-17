@@ -39,11 +39,12 @@
                 user.firstname,user.lastname,
                 task.id as task_id,
                 task.parent_id as task_parent_id,
-                task.task_name as task_name
+                task.task_name as task_name,
+                task.passing_score
 
                 FROM {$this->table} as ts 
 
-                LEFT JOIN users as user 
+                RIGHT JOIN users as user 
                 ON user.id = ts.user_id 
 
                 LEFT JOIN tasks as task

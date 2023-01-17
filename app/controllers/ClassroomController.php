@@ -24,7 +24,56 @@
         }
 
         public function index() {
-            $this->data['classrooms'] = $this->model->all(null, 'id desc');
+            if(isEqual(whoIs('user_type'), [UserService::TEACHER , UserService::STUDENT, UserService::PARENT])) {
+                $this->studentClassModel = model('ClassStudentModel');
+                switch(whoIs('user_type')) {
+                    case UserService::TEACHER:
+                        $this->data['classrooms'] = $this->model->all([
+                            'teacher_id' => whoIs('id')
+                        ], 'id desc');
+                    break;
+
+
+                    case UserService::STUDENT:
+                        $classroomIds = $this->studentClassModel->getStudentClassIds(whoIs('id'));
+                        if(!empty($classroomIds)) {
+                            $this->data['classrooms'] = $this->model->all([
+                                'id' => [
+                                    'condition' => 'in',
+                                    'value' => $classroomIds
+                                ]
+                            ], 'id desc');
+                        }
+                    break;
+
+                    case UserService::PARENT:
+                        $this->childrenModel = model('ChildrenModel');
+                        $children = $this->childrenModel->getChildren(whoIs('id'));
+                        $childIds = [];
+                        $classroomIds = [];
+                        
+                        if($children) {
+                            foreach($children as $child) {
+                                $childIds[] = $child->child_id;                                
+                            }
+                        }
+                        if (!empty($childIds)) {
+                            $classroomIds = $this->studentClassModel->getStudentClassIds($childIds);
+                        }
+
+                        if(!empty($classroomIds)) {
+                            $this->data['classrooms'] = $this->model->all([
+                                'id' => [
+                                    'condition' => 'in',
+                                    'value' => $classroomIds
+                                ]
+                            ], 'id desc');
+                        }
+                    break;
+                }
+            } else {
+                $this->data['classrooms'] = $this->model->all(null, 'id desc');
+            }
             return $this->view('classroom/index', $this->data);
         }
 
@@ -83,6 +132,58 @@
                         'page' => 'feed_show',
                         'feedId' => $post['feed_id']
                     ]));
+                }
+
+                if(!empty($post['btn_performance'])) {
+                    $tasks = $this->taskModel->all([
+                        'start_date' => [
+                            'condition' => 'between',
+                            'value' => [$post['start_date'], $post['end_date']]
+                        ],
+
+                        'parent_id' => $id
+                    ]); 
+
+                    $students = $this->model->getStudents($id);
+                    /**
+                     * task-id => [list of ta tasks //key is userid]
+                     */
+                    $taskSubmissionFormatted = [];
+                    if($tasks) {
+                        if(!isset($this->taskSubmissionModel)) {
+                            $this->taskSubmissionModel = model('TaskSubmissionModel');
+                        }
+                        $taskIds = [];
+                        foreach($tasks as $task) {
+                            $taskIds[] = $task->id;
+                        }
+
+                        $taskSubmissions =  $this->taskSubmissionModel->getAll([
+                            'where' => [
+                                'task.id' => [
+                                    'condition' => 'in',
+                                    'value' => $taskIds
+                                ]
+                            ]
+                        ]);
+
+                        foreach($taskSubmissions as $taskSub) {
+                            if(!isset($taskSubmissionFormatted[$taskSub->task_id])) {
+                                $taskSubmissionFormatted[$taskSub->task_id] = [];
+                            }
+
+                            if(!isset($taskSubmissionFormatted[$taskSub->task_id][$taskSub->user_id])) {
+                                $taskSubmissionFormatted[$taskSub->task_id][$taskSub->user_id] = $taskSub;
+                            }
+                        }
+                    }
+
+                    $this->data['tasks'] = $tasks;
+                    $this->data['students'] = $students;
+                    $this->data['taskSubmissions'] = $taskSubmissions;
+                    $this->data['taskSubmissionFormatted'] = $taskSubmissionFormatted;
+
+                    $this->data['pageData'] = 'classroom/show_inc/performance';
                 }
             }
             
@@ -155,6 +256,10 @@
                     $taskForm->setValue('parent_id', $id);
                     $this->data['taskForm'] = $taskForm;
                     $this->data['pagePath'] = 'classroom/show_inc/task_create';
+                break;
+
+                case 'performance' :
+                    $this->data['pagePath'] = 'classroom/show_inc/performance';
                 break;
 
                 case 'task_show' :

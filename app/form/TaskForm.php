@@ -13,6 +13,7 @@
             $this->addGoogleFormLink();
             $this->addDescription();
             $this->addStatus();
+            $this->addDate();
             $this->addParentId();
             $this->addCreatedBy();
             $this->addPassingScore();
@@ -92,6 +93,18 @@
                 'required' => true,
                 'options' => [
                     'label' => 'Label'
+                ]
+            ]);
+        }
+
+        public function addDate() {
+            $this->add([
+                'name' => 'start_date',
+                'type' => 'date',
+                'class' => 'form-control',
+                'required' => true,
+                'options' => [
+                    'label' => 'Start Date'
                 ]
             ]);
         }
