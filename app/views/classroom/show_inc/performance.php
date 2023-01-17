@@ -67,7 +67,10 @@
 <?php
     function wSearchAndPrintTask($taskId, $userId, &$taskSubmissionFormatted) {
         foreach($taskSubmissionFormatted as $key => $row) {
-            $task = $taskSubmissionFormatted[$taskId];
+            $task = $taskSubmissionFormatted[$taskId] ?? null;
+            if(is_null($task))
+                return 'pass nothing';
+                
             $userSubmittion = $task[$userId] ?? null;
 
             if(is_null($userSubmittion)) {
