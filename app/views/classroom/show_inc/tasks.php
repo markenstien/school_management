@@ -1,7 +1,7 @@
 <div class="sub-header">
     <h4>Tasks</h4>
     <?php
-        if(isTeacher() || isAdmin()) 
+        if(isTeacher()) 
             echo wLinkDefault(_route('classroom:show',$id, ['page' => 'task_create']) , 'Create');
     ?>
 </div>

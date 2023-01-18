@@ -4,7 +4,11 @@
     if(isTeacher()) 
         echo wLinkDefault(_route('task:edit', $task->id, [
             'returnTo' => seal(_route('classroom:show', $task->parent_id, ['page' => 'tasks']))
-        ]));
+        ]), 'Edit Task');
+
+        echo wLinkDefault(_route('task:delete', $task->id, [
+            'returnTo' => seal(_route('classroom:show', $task->parent_id, ['page' => 'tasks']))
+        ]), 'Delete Task', ['class' => 'form-verify','data-message' => 'Are you sure you want to delete, task #' .$task->task_reference . ' This is an irevokable Action']);
     ?>
     <?php ?>
     <div class="row">

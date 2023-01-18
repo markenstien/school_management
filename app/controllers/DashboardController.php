@@ -39,11 +39,14 @@
 					$totalStudent = $this->userModel->_getCount([
 						'user_type' => UserService::STUDENT
 					]);
-
+					$totalParent = $this->userModel->_getCount([
+						'user_type' => UserService::PARENT
+					]);
 					return $this->view('dashboard/admin', [
 						'totalClassroom' => $totalClassroom,
 						'totalTeacher' => $totalTeacher,
 						'totalStudent' => $totalStudent,
+						'totalParent' => $totalParent
 					]);
 				break;
 

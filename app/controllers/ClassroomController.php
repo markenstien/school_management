@@ -192,6 +192,7 @@
                                 foreach($children as $child) {
                                     $childIds [] = $child->child_id;
                                 }
+                                $childIds = $this->model->getStudentsInClass($id, $childIds);
                                 $students = $this->userModel->getAll([
                                     'where' => [
                                         'id' => [

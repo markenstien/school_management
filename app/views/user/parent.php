@@ -6,7 +6,11 @@
 			<div class="card theme-main">
 				<div class="card-header">
 					<h4 class="card-title">User Preview</h4>
-                    <?php echo wLinkDefault(_route('user:edit', $user->id) , 'Edit')?>
+                    <?php 
+                        if(isAdmin() || isEqual(whoIs('id'), $user->id)) {
+                            echo wLinkDefault(_route('user:edit', $user->id) , 'Edit Account');
+                        }
+                    ?>
 				</div>
 
 				<div class="card-body">
@@ -52,9 +56,13 @@
             <div class="card theme-main">
                 <div class="card-header">
                     <h4 class="card-title">Children</h4>
-                    <?php echo wLinkDefault(_route('user:show', $user->id, [
-                        'action' => 'add-child'
-                    ]), 'Add Child')?>
+                    <?php 
+                        if(isEqual(whoIs('id'), $user->id)) {
+                            echo wLinkDefault(_route('user:show', $user->id, [
+                                'action' => 'add-child'
+                            ]), 'Add Child');
+                        }
+                    ?>
                 </div>
 
                 <div class="card-body">
@@ -86,7 +94,9 @@
                                 <th>#</th>
                                 <th>Parent</th>
                                 <th style="background-color: var(--main-color); color:#fff">Child</th>
-                                <th>Action</th>
+                                <?php if(isEqual(whoIs('id'), $user->id)) :?>
+                                    <th>Action</th>
+                                <?php endif?>
                             </thead>
 
                             <tbody>
@@ -95,10 +105,12 @@
                                     <td><?php echo ++$key?></td>
                                     <td><?php echo $row->parent_name?></td>
                                     <td><?php echo $row->child_name?></td>
+                                    <?php if(isEqual(whoIs('id'), $user->id)) :?>
                                     <td>
                                         <?php echo wLinkDefault(_route('user:show', $row->child_id), 'Preview Child Account')?> | 
                                         <?php echo wLinkDefault(_route('user:delete-child', $row->id), 'Remove Child')?>
                                     </td>
+                                    <?php endif?>
                                 </tr>
                                 <?php endforeach?>
                             </tbody>

@@ -2,6 +2,10 @@
     <div class="card">
         <div class="card-header">
             <h4 class="card-title">Task Submission Preview</h4>
+            <?php echo wLinkDefault(_route('classroom:show', $task->parent_id, [
+                'page' => 'task_show',
+                'taskId' => $task->id
+            ]), 'Back to Task')?>
         </div>
 
 
@@ -50,34 +54,35 @@
                                 </td>
                             </tr>
                             
-                            <tr>
-                                <td>Action</td>
-                                <td>
-                                    <?php
-                                       if(isTeacher()) {
-                                        Form::submit('btn_approve', 'APPROVE', ['class' => 'btn btn-primary btn-sm']);
-                                        Form::submit('btn_decline', 'DECLINE', ['class' => 'btn btn-danger btn-sm']);
-                                        echo wDivider(20);
-                                       }
-                                    ?>
-                                    <?php 
-                                        $isShow = isAdmin() || isTeacher();
-                                       
-                                        if(!$isShow) {
-                                            $isShow = (isEqual($taskSub->status, 'unapproved') && whoIs('id', $taskSub->user_id));
-                                        }
+                            <?php
+                                $isShow = isTeacher();
+                                if($isShow) {
+                                    echo '<tr>';
+                                        echo '<td>';
+                                            Form::submit('btn_approve', 'APPROVE', ['class' => 'btn btn-primary btn-sm']);
+                                            Form::submit('btn_decline', 'DECLINE', ['class' => 'btn btn-danger btn-sm']);
+                                        echo '<td/>';
+                                    echo '</tr>';
+                                }
 
-                                        if($isShow) {
+                                if(!$isShow) {
+                                    $isShow = (isEqual($taskSub->status, 'unapproved') && whoIs('id', $taskSub->user_id));
+                                }
+
+                                if($isShow) {
+                                    echo '<tr>';
+                                        echo '<td>';
                                             echo wLinkDefault(_route('task-sub:delete', $taskSub->id, [
                                                 'returnTo' => seal(_route('classroom:show', $task->parent_id, [
                                                     'page' => 'task_show',
                                                     'taskId' => $task->id
                                                 ]))
-                                            ]), 'Delete');
-                                        }
-                                    ?>
-                                </td>
-                            </tr>
+                                            ]), 'Delete', ['class' => 'form-verify']);
+                                        echo '</td>';
+                                    echo '</tr>';
+                                }
+                            ?>
+                            
                         </table>
                     </div>
                 </div>

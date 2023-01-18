@@ -6,7 +6,9 @@
 			<div class="card">
 				<div class="card-header">
 					<h4 class="card-title">User Preview</h4>
-					<a href="<?php echo _route('user:edit' , $user->id)?>">Edit</a>
+					<?php if(isAdmin() || isEqual(whoIs('id'), $user->id)) :?>
+						<?php echo wLinkDefault(_route('user:edit', $user->id), 'Edit Account')?>
+					<?php endif?>
 				</div>
 
 				<div class="card-body">

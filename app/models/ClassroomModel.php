@@ -170,6 +170,25 @@
             );
             return $this->db->resultSet();
         }
+        
+        public function getStudentsInClass($class_id, $studentIds = []) {
+            $this->db->query(
+                "SELECT * FROM class_students as cs
+                    WHERE cs.class_id = '{$class_id}'
+                    AND cs.student_id in ('".implode("','",$studentIds)."') "
+            );
+
+            $results =  $this->db->resultSet();
+
+            $retVal = [];
+            if($results) {
+                foreach($results as $key => $row) {
+                    $retVal[] = $row->student_id;
+                }
+            }
+            
+            return $retVal;
+        }
 
         public function setTeacher($teacherId, $classroomId) {
             $classroom = $this->get($classroomId);

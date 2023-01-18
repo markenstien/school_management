@@ -25,7 +25,15 @@
             <?php foreach($students as $key => $row) :?>
                 <tr>
                     <td><?php echo ++$key?></td>
-                    <td><?php echo $row->user_identification?></td>
+                    <td>
+                        <?php
+                            if(isStudent() || isParent()) {
+                                echo crop_string($row->user_identification, 3);
+                            } else {
+                                echo $row->user_identification;
+                            }
+                        ?>
+                    </td>
                     <td><?php echo $row->firstname . ' ' . $row->lastname?></td>
                     <td><?php echo $row->gender?></td>
                     <?php if(isTeacher() || isAdmin()) :?>
