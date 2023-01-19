@@ -16,6 +16,7 @@
             $this->addDate();
             $this->addParentId();
             $this->addCreatedBy();
+            $this->addTotalItems();
             $this->addPassingScore();
             $this->customSubmit('Save Task');
         }
@@ -81,6 +82,18 @@
                 'required' => true,
                 'options' => [
                     'label' => 'Passing Score'
+                ]
+            ]);
+        }
+
+        public function addTotalItems() {
+            $this->add([
+                'name' => 'total_items',
+                'type' => 'number',
+                'class' => 'form-control',
+                'required' => true,
+                'options' => [
+                    'label' => 'Total Items'
                 ]
             ]);
         }

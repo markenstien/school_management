@@ -97,7 +97,7 @@
                 }
             ?>
                 <span class="badge badge-<?php echo $badgeColor?>" title="<?php echo $result->status?>">
-                    <?php echo $result->user_score?>/<?php echo $result->passing_score?>
+                    <?php echo $result->user_score?>/<?php echo $result->total_items?>
                 </span>
             <?php
         }

@@ -17,7 +17,8 @@ use function PHPSTORM_META\map;
             'passing_score',
             'created_by',
             'created_at',
-            'start_date'
+            'start_date',
+            'total_items'
         ];
 
 

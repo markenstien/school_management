@@ -54,7 +54,8 @@
                 task.id as task_id,
                 task.parent_id as task_parent_id,
                 task.task_name as task_name,
-                task.passing_score
+                task.passing_score,
+                task.total_items
 
                 FROM {$this->table} as ts 
 

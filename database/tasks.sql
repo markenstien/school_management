@@ -19,7 +19,8 @@ create table tasks(
 alter table tasks 
     add column start_date date;
 
-
+alter table tasks 
+    add column total_items smallint;
 
 /**
 *create view

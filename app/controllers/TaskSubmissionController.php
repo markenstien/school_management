@@ -43,12 +43,13 @@
 
                 if (!empty($post['btn_approve'])) {
 
-                    if (!empty($post['passing_score'])) {
-                        if($post['passing_score'] < $post['user_score']) {
-                            Flash::set("Invalid Score", 'danger');
-                            return request()->return();
-                        }
+                    //check user score
+
+                    if($post['user_score'] > $task->total_items) {
+                        Flash::set("Invalid Score", 'danger');
+                        return request()->return();
                     }
+                    
                     Flash::set("Task Submission Approved");
                     $this->model->approve($id);
                     $this->model->update([
