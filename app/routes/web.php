@@ -122,7 +122,8 @@
 		'create' => $controller.'/create',
 		'delete' => $controller.'/destroy',
 		'download' => $controller.'/download',
-		'show'   => $controller.'/show'
+		'show'   => $controller.'/show',
+		'upload-google-sheet' => $controller. '/uploadGoogleSheet'
 	];
 
 	$controller = '/TaskSubmissionController';

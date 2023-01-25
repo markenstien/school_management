@@ -26,6 +26,13 @@
                                 <td><?php echo $taskSub->firstname . ' ' .$taskSub->lastname?></td>
                             </tr>
                             <tr>
+                                <td>Total Items</td>
+                                <td>
+                                    <?php echo $task->total_items; ?>
+                                </td>
+                            </tr>
+
+                            <tr>
                                 <td>Passing Score</td>
                                 <td>
                                     <?php echo $task->passing_score; ?>

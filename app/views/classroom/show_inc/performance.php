@@ -36,6 +36,10 @@
         </div>
 
         <div class="card-body">
+            <span class="badge badge-warning">No Task</span>
+            <span class="badge badge-success">Approved Submission</span>
+            <span class="badge badge-primary">Pending Submission</span>
+            <span class="badge badge-danger">Failed</span>
             <table class="table table-bordered">
                 <tbody>
                     <td width="50px"></td>
@@ -92,7 +96,8 @@
             $badgeColor = 'primary';
                 if(isEqual($result->status,'approved')) {
                     $badgeColor = 'success';
-                } else if(isEqual($result->status,'unapproved')) {
+                }
+                if($result->user_score < $result->passing_score) {
                     $badgeColor = 'danger';
                 }
             ?>

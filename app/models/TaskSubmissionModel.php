@@ -6,6 +6,7 @@
             'task_id',
             'user_id',
             'user_score',
+            'status'
         ];
 
         public function createOrUpdate($data, $id = null) {

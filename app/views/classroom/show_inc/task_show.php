@@ -1,18 +1,18 @@
 <div>
     <h4>Task Preview #<?php echo $task->task_reference?></h4>
     <?php
-    if(isTeacher()) 
+    if(isTeacher()) {
         echo wLinkDefault(_route('task:edit', $task->id, [
             'returnTo' => seal(_route('classroom:show', $task->parent_id, ['page' => 'tasks']))
         ]), 'Edit Task');
-        ?>
-            &nbsp;
-        <?php 
+
+        echo '&nbsp;';
+
         echo wLinkDefault(_route('task:delete', $task->id, [
             'returnTo' => seal(_route('classroom:show', $task->parent_id, ['page' => 'tasks']))
         ]), 'Delete Task', ['class' => 'form-verify','data-message' => 'Are you sure you want to delete, task #' .$task->task_reference . ' This is an irevokable Action']);
+    }      
     ?>
-    <?php ?>
     <div class="row">
         <div class="col-md-6">
             <div class="table-responsive">
@@ -81,8 +81,15 @@
                     'data-bs-target' => '#exampResultModal'
                 ]);
             }
-        ?>
 
+            if(isTeacher()) {
+                echo wLinkDefault('#', 'Upload Google Sheet Excel', [
+                    'data-bs-toggle' => 'modal',
+                    'data-bs-target' => '#uploadGoogleSheet'
+                ]);
+            }
+        ?>
+    <?php Flash::show('submit_message')?>
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead>
@@ -149,6 +156,48 @@
 
         <div class="form-group">
             <?php Form::submit('', 'Save Submission')?>
+        </div>
+        
+        <?php Form::close()?>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="uploadGoogleSheet" tabindex="-1" aria-labelledby="exampResultModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampResultModalLabel">Upload Google Sheet Result</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
+      </div>
+      <div class="modal-body">
+        <h4>Guidelines</h4>
+        <span class="badge badge-danger">Email, Student Number, Score Columns</span> should exists in your spreadsheet(in any order).
+        <?php
+            Form::open([
+                'method' => 'post',
+                'url' => _route('task:upload-google-sheet', null, [
+                    'returnTo' => seal(_route('classroom:show', $task->parent_id, [
+                        'page' => 'task_show',
+                        'taskId' => $task->id
+                    ]))
+                ]),
+                'enctype' => 'multipart/form-data'
+            ]);
+
+            Form::hidden('task_id', $task->id);
+            Form::hidden('user_id', whoIs('id'));
+        ?>
+        <div class="form-group">
+            <?php
+                echo $_attachmentForm->getCol('file');
+                echo $_attachmentForm->getCol('global_key');
+            ?>
+        </div>
+
+        <div class="form-group">
+            <?php Form::submit('btn_upload_google_sheet', 'Save Submission')?>
         </div>
         
         <?php Form::close()?>

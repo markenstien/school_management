@@ -1,6 +1,11 @@
 <?php 
     use Form\TaskForm;
+    use Services\UserService;
+    use Shuchkin\SimpleXLSX;
     load(["TaskForm"], FORMS);
+    load(["UserService"], SERVICES);
+
+    require_once LIBS.DS.'simplexlsx/vendor/autoload.php';
 
     class TaskController extends Controller
     {
@@ -8,6 +13,10 @@
         {
             parent::__construct();
             $this->model = model('TaskModel');
+            $this->taskSubmission = model('TaskSubmissionModel');
+            $this->userModel = model('UserModel');
+            $this->taskModel = model('TaskModel');
+
             $this->data['taskForm'] = new TaskForm();
         }
 
@@ -64,5 +73,86 @@
             $taskForm->setValueObject($task);
             $taskForm->addId($task->id);
             return $this->view('task/edit', $this->data);
+        }
+
+        public function uploadGoogleSheet() {
+            $req = request()->inputs();
+            if(isSubmitted()) {
+                $messages = [];
+
+                $post= request()->posts();
+
+                $res = upload_document('file', PATH_UPLOAD.DS.'spreadsheets');
+                if(isEqual($res['status'],'success')) {
+                    $uploadResult = $res['result'];
+                    $reader = SimpleXLSX::parse($uploadResult['path'].DS.$uploadResult['name']);
+
+                    $headers = [];
+                    foreach($reader->rows() as $rowCount => $rowValues) {
+                        if($rowCount == 0) {
+                            foreach($rowValues as $rowKey => $rowVal) {
+                                if(isEqual($rowVal, ['score', 'student number','email address'])) {
+                                    $rowVal = str_replace(' ', '_',strtolower($rowVal));
+                                    $headers[$rowVal] = $rowKey;
+                                }
+                            }
+
+                            continue;
+                        }
+                        
+                        $studentNumber = trim($rowValues[$headers['student_number']]);
+                        $score = trim($rowValues[$headers['score']]);
+
+                        $user = $this->userModel->single([
+                            'user_identification' => $studentNumber,
+                            'user_type' => UserService::STUDENT
+                        ]);
+
+                        if(!$user) {
+                            $invalidUsers[] = $studentNumber;
+                            $messages[] = "User with '{$studentNumber}' student number does not found.";
+                        } else {
+                            $users [] = $user;
+
+                            $task = $this->taskModel->get($post['task_id']);
+
+                            if(!$task) {
+                                $messages [] = "Task Not exists.";
+                                break;
+                            } elseif($score > $task->total_items) {
+                                $messages [] = "User {$user->firstname}@#{$user->user_identification} Score ({$score}) is over total items, invalid score.";
+                                continue;
+                            }
+
+                            $isAbleToSubmit = $this->taskSubmission->createOrUpdate([
+                                'task_id' => $post['task_id'],
+                                'user_id' => $user->id,
+                                'user_score' => $score,
+                                'status' => 'approved'
+                            ]);
+
+                            if($isAbleToSubmit) {
+                                $messages [] = "{$user->firstname}@#{$user->user_identification} able to submit score '{$score}'.";
+                            } else {
+                                $messages [] = "{$user->firstname}@#{$user->user_identification} " . $this->taskSubmission->getErrorString();
+                            }
+
+                        }
+                    }
+
+                    $messageStr = '';
+                    foreach($messages as $key => $row) {
+                        $messageStr .= "<div>{$row}</div>";
+                    }
+                    Flash::set($messageStr,'primary','submit_message');
+
+                    unlink($uploadResult['path'].DS.$uploadResult['name']);
+                    if(isset($req['returnTo'])) {
+                        return redirect(unseal($req['returnTo']));
+                    } else {
+                        return redirect(_route('classroom:show', $post['task_id']));
+                    }
+                }
+            }
         }
     }

@@ -207,20 +207,22 @@
                             }
                         }
 
-                        foreach($taskSubmissions as $taskSub) {
-                            if(!isset($taskSubmissionFormatted[$taskSub->task_id])) {
-                                $taskSubmissionFormatted[$taskSub->task_id] = [];
-                            }
-
-                            if(!isset($taskSubmissionFormatted[$taskSub->task_id][$taskSub->user_id])) {
-                                $taskSubmissionFormatted[$taskSub->task_id][$taskSub->user_id] = $taskSub;
+                        if (isset($taskSubmissions)) {
+                            foreach ($taskSubmissions as $taskSub) {
+                                if(!isset($taskSubmissionFormatted[$taskSub->task_id])) {
+                                    $taskSubmissionFormatted[$taskSub->task_id] = [];
+                                }
+    
+                                if(!isset($taskSubmissionFormatted[$taskSub->task_id][$taskSub->user_id])) {
+                                    $taskSubmissionFormatted[$taskSub->task_id][$taskSub->user_id] = $taskSub;
+                                }
                             }
                         }
                     }
 
                     $this->data['tasks'] = $tasks;
                     $this->data['students'] = $students;
-                    $this->data['taskSubmissions'] = $taskSubmissions;
+                    $this->data['taskSubmissions'] = $taskSubmissions ?? [];
                     $this->data['taskSubmissionFormatted'] = $taskSubmissionFormatted;
                     $this->data['pageData'] = 'classroom/show_inc/performance';
                 }
