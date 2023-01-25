@@ -156,35 +156,38 @@
 		{
 			$url = $this->url;
 
-			if( isEqual($url[0] , ['API' , 'CRON']))
+			if(isEqual($url[0] , ['API' , 'CRON']))
 				return $this->loadApi($url[0] );
 
+			$hasController = true;
 			if(isset($url[0])){
 
 				if(file_exists( CNTLRS.DS.ucfirst($url[0]).'.php' )){
-
 					$this->current_controller = ucfirst($url[0]);
 					unset($url[0]);
 				}
 
+				if($hasController = false);
 
-				require_once(CNTLRS.DS.$this->current_controller.'.php');
+				// require_once(CNTLRS.DS.$this->current_controller.'.php');
 
-				$this->current_controller = new $this->current_controller;
+				// $this->current_controller = new $this->current_controller;
 			}
 
-			if(isset($url[1])){
+			if($hasController) {
+				if(isset($url[1])){
 
-				if (method_exists($this->current_controller, $this->cleanMethod(strtolower($url[1]))))
-				{	
-					$this->current_method = $this->cleanMethod($url[1]);
-					unset($url[1]);
+					if (method_exists($this->current_controller, $this->cleanMethod(strtolower($url[1]))))
+					{	
+						$this->current_method = $this->cleanMethod($url[1]);
+						unset($url[1]);
+					}
 				}
+				
+				$this->params = $url ? array_values($url) : [];
+	
+				call_user_func_array([$this->current_controller , $this->current_method] , $this->params);
 			}
-			
-			$this->params = $url ? array_values($url) : [];
-
-			call_user_func_array([$this->current_controller , $this->current_method] , $this->params);
 		}
 
 
