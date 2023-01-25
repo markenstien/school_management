@@ -165,13 +165,12 @@
 				if(file_exists( CNTLRS.DS.ucfirst($url[0]).'.php' )){
 					$this->current_controller = ucfirst($url[0]);
 					unset($url[0]);
+
+					require_once(CNTLRS.DS.$this->current_controller.'.php');
+					$this->current_controller = new $this->current_controller;
+				} else {
+					$hasController = false;
 				}
-
-				if($hasController = false);
-
-				// require_once(CNTLRS.DS.$this->current_controller.'.php');
-
-				// $this->current_controller = new $this->current_controller;
 			}
 
 			if($hasController) {
