@@ -75,6 +75,8 @@
                                     ]
                                 ]]
                             ], 'id desc');
+                        } else {
+                            $this->data['classrooms'] = [];
                         }
                     break;
                 }
@@ -83,6 +85,7 @@
                     'order' => 'cr.id desc'
                 ]);
             }
+
             return $this->view('classroom/index', $this->data);
         }
 

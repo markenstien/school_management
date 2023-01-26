@@ -29,12 +29,14 @@
                         <td>Task Status</td>
                         <td><?php echo $task->status?></td>
                     </tr>
+                    <?php if(isTeacher() || isStudent()) :?>
                     <tr>
                         <td>Task Link</td>
                         <td>
                             <a href="<?php echo $task->google_form_link?>">Exam Link</a>
                         </td>
                     </tr>
+                    <?php endif?>
                 </table>
             </div>
             <p>Description</p>
