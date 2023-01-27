@@ -62,8 +62,7 @@
                             </tr>
                             
                             <?php
-                                $isShow = isTeacher();
-                                if($isShow) {
+                                if(isTeacher()) {
                                     echo '<tr>';
                                         echo '<td>';
                                             Form::submit('btn_approve', 'APPROVE', ['class' => 'btn btn-primary btn-sm']);
@@ -71,12 +70,8 @@
                                         echo '<td/>';
                                     echo '</tr>';
                                 }
-
-                                if(!$isShow) {
-                                    $isShow = (isEqual($taskSub->status, 'unapproved') && whoIs('id', $taskSub->user_id));
-                                }
-
-                                if($isShow) {
+                                
+                                if((isEqual($taskSub->status, 'unapproved') && whoIs('id', $taskSub->user_id)) || isTeacher()) {
                                     echo '<tr>';
                                         echo '<td>';
                                             echo wLinkDefault(_route('task-sub:delete', $taskSub->id, [
