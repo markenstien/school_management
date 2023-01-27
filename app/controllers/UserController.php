@@ -134,6 +134,41 @@ use Services\UserService;
 				$this->data['children'] = $this->model->getChildren($id);
 				return $this->view('user/parent', $this->data);
 			}
+
+			if(isEqual($user->user_type, UserService::TEACHER)) {
+				$this->database = Database::getInstance();
+				$this->classroomModel = model('ClassroomModel');
+				$this->taskModel = model('TaskModel');
+				
+				$classrooms = $this->classroomModel->getAll([
+					'where' => [
+						'teacher_id' => $id
+					]
+				]);
+				$classroomIds = [];
+				foreach($classrooms as $key => $row) {
+					$classroomIds [] = $row->id;
+				}
+
+				if($classroomIds) {
+					$this->database->query(
+						"SELECT * FROM v_total_student 
+							WHERE class_id in ('".implode("','", $classroomIds)."')"
+					);
+					$totalStudent = $this->database->single()->total ?? 0;
+				}
+				
+				$this->data['teacher_data'] = [
+					'classrooms' => $classrooms,
+					'totalStudent'   => $totalStudent ?? 0,
+					'taskTotal' => $this->taskModel->_getCount([
+						'parent_id' => [
+							'condition' => 'in',
+							'value' => $classroomIds
+						]
+					])
+				];
+			}
 			return $this->view('user/show' , $this->data);
 		}
 

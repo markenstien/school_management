@@ -155,7 +155,6 @@
 		public function destroy($id)
 		{
 			$returnTo = $_GET['returnTo'] ?? null;
-
 			if( isset( $this->model ))
 			{
 				$res = $this->model->deleteByKey([

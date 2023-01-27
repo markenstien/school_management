@@ -48,6 +48,16 @@
 						<p><?php echo "$user->address"?></p>
 					</div>
 					<hr>
+                    <?php
+						if(isAdmin()) {
+							echo wLinkDefault(_route('user:delete', $user->id, [
+								'returnTo' => seal(_route('user:index'))
+							]), 'Delete User', [
+								'class' => 'btn btn-danger form-verify',
+								'data-message' => 'Are you sure you want to delete this user?'
+							]);
+						}
+					?>
 				</div>
 			</div>	
 		</div>

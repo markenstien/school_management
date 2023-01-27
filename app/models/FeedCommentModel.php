@@ -22,10 +22,9 @@
                 "SELECT concat(commentor.firstname, ' ',commentor.lastname) as commentor,
                     commentor.user_type as commentor_type, {$this->table}.* 
                     FROM {$this->table}
-                    
                     LEFT JOIN users as commentor
                     ON commentor.id = feed_comments.user_id
-                    
+                    WHERE feed_id = '{$feed_id}'
                     ORDER BY {$this->table}.id desc"
             );
             return $this->db->resultSet();
